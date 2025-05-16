@@ -13,9 +13,11 @@ ENVIRONMENT = os.environ.get("ENVIRONMENT", "development")
 FRONTEND_URL = os.environ.get("FRONTEND_URL", "http://localhost:3000")
 
 # Configure CORS
-allowed_origins = [FRONTEND_URL]
-if ENVIRONMENT == "development":
-    allowed_origins.append("http://localhost:3000")
+allowed_origins = [
+    FRONTEND_URL,
+    "https://activation-livid.vercel.app",  # Add your Vercel domain explicitly
+    "http://localhost:3000"
+]
 
 app.add_middleware(
     CORSMiddleware,
