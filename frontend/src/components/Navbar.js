@@ -13,10 +13,7 @@ import {
   Text,
   Badge,
   useColorModeValue,
-  Image,
-  useBreakpointValue,
-  Spacer,
-  Stack
+  Image
 } from '@chakra-ui/react';
 import { 
   FiMenu, 
@@ -32,11 +29,6 @@ const Navbar = ({ onMenuClick }) => {
 
   const bgColor = useColorModeValue('white', 'gray.800');
   const borderColor = useColorModeValue('gray.200', 'gray.700');
-  
-  // Responsive display
-  const isMobile = useBreakpointValue({ base: true, md: false });
-  const logoSize = useBreakpointValue({ base: "60px", md: "80px" });
-  const headingSize = useBreakpointValue({ base: "sm", md: "md" });
 
   return (
     <Box
@@ -49,14 +41,8 @@ const Navbar = ({ onMenuClick }) => {
       borderBottom="1px"
       borderColor={borderColor}
     >
-      <Flex 
-        px={3} 
-        h={16} 
-        alignItems="center" 
-        justifyContent="space-between"
-        flexWrap="nowrap"
-      >
-        <HStack spacing={2}>
+      <Flex px={4} h={16} alignItems="center" justifyContent="space-between">
+        <HStack spacing={4} w="full">
           <IconButton
             icon={<FiMenu />}
             aria-label="Open menu"
@@ -64,27 +50,12 @@ const Navbar = ({ onMenuClick }) => {
             onClick={onMenuClick}
           />
           
-          <HStack spacing={1} align="center" maxW={{ base: "180px", md: "auto" }}>
-            <Image src="/Deriv.png" alt="Deriv Logo" height={logoSize} objectFit="contain" display={{ base: "none", sm: "block" }} />
-            <Heading 
-              size={headingSize} 
-              fontWeight="bold" 
-              isTruncated
-              noOfLines={1}
-            >
-              Partner Activation
-            </Heading>
+          <HStack spacing={3} align="center">
+            <Image src="/Deriv.png" alt="Deriv Logo" height="80px" objectFit="contain" />
+            <Heading size="md" fontWeight="bold">Partner Activation Academy</Heading>
           </HStack>
-        </HStack>
-        
-        <Spacer />
-        
-        <Stack 
-          direction="row" 
-          spacing={{ base: 1, md: 4 }}
-          align="center"
-        >
-          {!isMobile && (
+          
+          <HStack ml="auto" spacing={4}>
             <Flex align="center">
               <Badge colorScheme="green" mr={2} fontSize="sm" py={1} px={2} borderRadius="full">
                 {user?.level || 'Novice'}
@@ -93,40 +64,39 @@ const Navbar = ({ onMenuClick }) => {
                 XP: {user?.xp || 0}
               </Text>
             </Flex>
-          )}
-          
-          <Menu>
-            <Box>
-              <IconButton
-                icon={<FiBell />}
-                aria-label="Notifications"
-                variant="ghost"
-                as={MenuButton}
-                size={isMobile ? "sm" : "md"}
-              />
-            </Box>
-            <MenuList>
-              <MenuItem>New module available</MenuItem>
-              <MenuItem>You earned a badge!</MenuItem>
-              <MenuItem>Quiz results ready</MenuItem>
-            </MenuList>
-          </Menu>
+            
+            <Menu>
+              <Box>
+                <IconButton
+                  icon={<FiBell />}
+                  aria-label="Notifications"
+                  variant="ghost"
+                  as={MenuButton}
+                />
+              </Box>
+              <MenuList>
+                <MenuItem>New module available</MenuItem>
+                <MenuItem>You earned a badge!</MenuItem>
+                <MenuItem>Quiz results ready</MenuItem>
+              </MenuList>
+            </Menu>
 
-          <Menu>
-            <Avatar
-              size="sm"
-              name={user?.username || 'User'}
-              cursor="pointer"
-              as={MenuButton}
-            />
-            <MenuList>
-              <MenuItem onClick={() => navigate('/profile')}>
-                <FiSettings size={18} style={{ marginRight: '8px' }} />
-                Profile
-              </MenuItem>
-            </MenuList>
-          </Menu>
-        </Stack>
+            <Menu>
+              <Avatar
+                size="sm"
+                name={user?.username || 'User'}
+                cursor="pointer"
+                as={MenuButton}
+              />
+              <MenuList>
+                <MenuItem onClick={() => navigate('/profile')}>
+                  <FiSettings size={18} style={{ marginRight: '8px' }} />
+                  Profile
+                </MenuItem>
+              </MenuList>
+            </Menu>
+          </HStack>
+        </HStack>
       </Flex>
     </Box>
   );

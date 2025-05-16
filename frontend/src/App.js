@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { Box, Spinner, Center, useBreakpointValue } from '@chakra-ui/react';
-import './styles/responsive.css'; // Import the responsive CSS
+import { Box, Spinner, Center } from '@chakra-ui/react';
 
 // Pages
 import Dashboard from './pages/Dashboard';
@@ -71,14 +70,8 @@ function App() {
 
 // App content with auth context
 function AppContent() {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const { user, loading } = useAuth();
-  
-  // Determine sidebar state based on screen size
-  const defaultSidebarState = useBreakpointValue({ base: false, md: true });
-  React.useEffect(() => {
-    setSidebarOpen(defaultSidebarState);
-  }, [defaultSidebarState]);
 
   // Show loading spinner while data is loading
   if (loading) {
@@ -96,22 +89,13 @@ function AppContent() {
   }
   
   return (
-    <Box display="flex" flexDirection="column" minH="100vh">
+    <Box display="flex" height="100vh">
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       
-      <Box 
-        ml={{ base: 0, md: 60 }} 
-        transition="margin-left 0.3s" 
-        flex="1"
-      >
+      <Box flex="1" overflowY="auto">
         <Navbar onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
         
-        <Box 
-          as="main" 
-          p={{ base: 2, md: 4 }} 
-          mt={16}
-          maxW="100%"
-        >
+        <Box as="main" p={4} mt={16}>
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/modules" element={<Modules />} />
