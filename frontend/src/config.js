@@ -1,6 +1,7 @@
 // API configuration
 const config = {
-  apiUrl: process.env.REACT_APP_API_URL || 'http://localhost:8000'
+  // Replace this URL with your actual Render backend URL
+  apiUrl: 'https://your-render-backend-url.onrender.com'
 };
 
 export default config; 
