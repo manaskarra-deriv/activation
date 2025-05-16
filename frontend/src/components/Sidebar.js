@@ -10,7 +10,11 @@ import {
   Divider,
   Badge,
   Progress,
-  Heading
+  Heading,
+  Drawer,
+  DrawerContent,
+  DrawerOverlay,
+  useBreakpointValue
 } from '@chakra-ui/react';
 import { 
   FiHome, 
@@ -44,24 +48,23 @@ const Sidebar = ({ isOpen, onClose }) => {
     ? (user.modules_completed.length / 5) * 100 
     : 0;
   
-  return (
+  // Use drawer on mobile, regular sidebar on desktop
+  const isMobile = useBreakpointValue({ base: true, md: false });
+  
+  const SidebarContent = (
     <Box
-      position="fixed"
-      w={{ base: 'full', md: 60 }}
-      h="full"
       bg={bgColor}
       borderRight="1px"
       borderColor={borderColor}
-      display={{ base: isOpen ? 'block' : 'none', md: 'block' }}
-      transition="3s ease"
-      zIndex={{ base: 20, md: 10 }}
+      w="full"
+      h="full"
       overflowY="auto"
     >
       <Flex h="20" alignItems="center" justifyContent="space-between" px={4}>
         <Text fontSize="2xl" fontWeight="bold" color="brand.600">
           Partner Hub
         </Text>
-        <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
+        {isMobile && <CloseButton onClick={onClose} />}
       </Flex>
 
       <Box px={4} pb={4}>
@@ -130,6 +133,37 @@ const Sidebar = ({ isOpen, onClose }) => {
           Complete all levels to fast-track to Silver tier
         </Text>
       </Box>
+    </Box>
+  );
+
+  // Render as drawer on mobile
+  if (isMobile) {
+    return (
+      <Drawer
+        isOpen={isOpen}
+        placement="left"
+        onClose={onClose}
+        returnFocusOnClose={false}
+        onOverlayClick={onClose}
+        size="full"
+      >
+        <DrawerOverlay />
+        <DrawerContent>
+          {SidebarContent}
+        </DrawerContent>
+      </Drawer>
+    );
+  }
+  
+  // Render as sidebar on desktop
+  return (
+    <Box
+      position="fixed"
+      w={60}
+      h="full"
+      display={{ base: 'none', md: 'block' }}
+    >
+      {SidebarContent}
     </Box>
   );
 };

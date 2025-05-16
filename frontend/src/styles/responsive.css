@@ -1,0 +1,61 @@
+/* Responsive CSS for Partner Activation Academy */
+
+/* Mobile-first responsive adjustments */
+body, html {
+  overflow-x: hidden;
+  max-width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+/* Fix sidebar on mobile */
+@media (max-width: 768px) {
+  /* Adjust sidebar for mobile */
+  .chakra-modal__content-container {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  
+  /* Make main content area fully responsive */
+  .chakra-container, 
+  main, 
+  .chakra-box {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+}
+
+/* Make sure content doesn't overflow */
+.chakra-box {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Fix for module cards grid layout */
+.module-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important;
+  gap: 16px !important;
+  width: 100% !important;
+}
+
+/* Responsive text sizing */
+h1, h2, h3 {
+  word-break: break-word;
+}
+
+/* Fix for tables on mobile */
+table {
+  display: block;
+  overflow-x: auto;
+  width: 100%;
+}
+
+/* Fix for images */
+img {
+  max-width: 100%;
+  height: auto;
+} 
