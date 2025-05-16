@@ -26,6 +26,7 @@ import {
 import { FiAward, FiTrendingUp } from 'react-icons/fi';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import config from '../config';
 
 const Leaderboard = () => {
   const { user } = useAuth();
@@ -42,7 +43,7 @@ const Leaderboard = () => {
     const fetchLeaderboard = async () => {
       try {
         setIsLoading(true);
-        const response = await axios.get('http://localhost:8000/leaderboard');
+        const response = await axios.get(`${config.apiUrl}/leaderboard`);
         setLeaderboard(response.data);
         setError(null);
       } catch (err) {

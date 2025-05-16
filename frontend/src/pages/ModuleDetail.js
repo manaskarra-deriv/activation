@@ -36,6 +36,7 @@ import {
 import { useParams, useNavigate, Link as RouterLink } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import config from '../config';
 
 const ModuleDetail = () => {
   const { moduleId } = useParams();
@@ -56,7 +57,7 @@ const ModuleDetail = () => {
     const fetchModule = async () => {
       try {
         setIsLoading(true);
-        const response = await axios.get(`http://localhost:8000/modules/${moduleId}`);
+        const response = await axios.get(`${config.apiUrl}/modules/${moduleId}`);
         setModule(response.data);
         setError(null);
       } catch (err) {

@@ -37,6 +37,7 @@ import { FiAward, FiTrendingUp, FiCheckCircle, FiChevronRight, FiBook, FiBarChar
 import { Link as RouterLink } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
+import config from '../config';
 
 // Components
 import ModuleCard from '../components/ModuleCard';
@@ -56,8 +57,8 @@ const Dashboard = () => {
     const fetchData = async () => {
       try {
         const [modulesRes, leaderboardRes] = await Promise.all([
-          axios.get('http://localhost:8000/modules'),
-          axios.get('http://localhost:8000/leaderboard')
+          axios.get(`${config.apiUrl}/modules`),
+          axios.get(`${config.apiUrl}/leaderboard`)
         ]);
 
         setModules(modulesRes.data);

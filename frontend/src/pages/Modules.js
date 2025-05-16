@@ -14,6 +14,7 @@ import {
 } from '@chakra-ui/react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import config from '../config';
 
 // Components
 import ModuleCard from '../components/ModuleCard';
@@ -29,7 +30,7 @@ const Modules = () => {
     const fetchModules = async () => {
       try {
         setIsLoading(true);
-        const response = await axios.get('http://localhost:8000/modules');
+        const response = await axios.get(`${config.apiUrl}/modules`);
         setModules(response.data);
         setError(null);
       } catch (err) {
