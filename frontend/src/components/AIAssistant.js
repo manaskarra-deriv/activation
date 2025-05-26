@@ -14,19 +14,23 @@ import {
   Flex,
   Avatar,
   Badge,
-  Divider
+  Divider,
+  Alert,
+  AlertIcon
 } from '@chakra-ui/react';
-import { FiMessageCircle, FiX, FiSend, FiTrash2 } from 'react-icons/fi';
+import { FiMessageCircle, FiX, FiSend, FiTrash2, FiMaximize2, FiMinimize2 } from 'react-icons/fi';
 
 const AIAssistant = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [error, setError] = useState(null);
   const [messages, setMessages] = useState([
     {
       id: 1,
       type: 'bot',
-      content: "Hi! I'm your Partner Academy Assistant. I can help you navigate through the Level-Up Journey, understand XP & Rewards, and answer questions about becoming a successful partner. How can I assist you today?",
+      content: "Hi! I'm your Partner Academy Assistant powered by AI. I can help you navigate through the Level-Up Journey, understand XP & Rewards, and answer questions about becoming a successful partner. How can I assist you today?",
       timestamp: new Date()
     }
   ]);
@@ -45,99 +49,239 @@ const AIAssistant = () => {
 
   const openChat = () => setIsOpen(true);
   const closeChat = () => setIsOpen(false);
+  const toggleExpanded = () => setIsExpanded(!isExpanded);
   
   const clearChat = () => {
     setMessages([
       {
         id: 1,
         type: 'bot',
-        content: "Hi! I'm your Partner Academy Assistant. I can help you navigate through the Level-Up Journey, understand XP & Rewards, and answer questions about becoming a successful partner. How can I assist you today?",
+        content: "Hi! I'm your Partner Academy Assistant powered by AI. I can help you navigate through the Level-Up Journey, understand XP & Rewards, and answer questions about becoming a successful partner. How can I assist you today?",
         timestamp: new Date()
       }
     ]);
     setInputValue('');
     setIsTyping(false);
+    setError(null);
   };
 
-  // Enhanced knowledge base with FAQ content
-  const getAIResponse = (userMessage) => {
-    const message = userMessage.toLowerCase();
+  // Function to format text with markdown-like formatting
+  const formatMessage = (content) => {
+    // Split content by **text** pattern and format accordingly
+    const parts = content.split(/(\*\*.*?\*\*)/g);
     
-    // Level-Up Journey related (check this first before general "how to" questions)
-    if (message.includes('level-up') || message.includes('level up') || message.includes('journey') || message.includes('curriculum')) {
-      return "The Level-Up Journey is your path to becoming a successful partner! It has 4 levels:\n\n🔹 Mandatory Level: Complete KYC & Set Payment Method (0 XP)\n🔹 Medium Level: Bring 5 clients & 5 sub-affiliates (500 XP each)\n🔹 High Level: Earn $50 commissions & $500 trading volume (600 XP each)\n🔹 PRO Level: Earn $200 commissions & $1000 trading volume (2500 XP each)\n\nStart with the Mandatory level and work your way up!";
-    }
-    
-    // Timeline/completion questions
-    if (message.includes('how long') || message.includes('timeline') || message.includes('complete') && message.includes('program')) {
-      return "The timeline varies based on your dedication and business development pace! ⏱️\n\n📅 Mandatory level: Can be completed in a few days\n📅 Medium, High, PRO levels: Depends on your success in bringing clients and generating commissions\n📅 Most active partners: See significant progress within 3-6 months\n\nYour pace depends on how quickly you can acquire clients and build your network!";
-    }
-    
-    // XP related
-    if (message.includes('xp') || message.includes('experience') || message.includes('points') || message.includes('earn xp')) {
-      return "XP (Experience Points) are earned by completing actions in your Level-Up Journey:\n\n⭐ Medium Level: 500 XP per action\n⭐ High Level: 600 XP per action\n⭐ PRO Level: 2500 XP per action\n\nMilestones: 500, 1000, 1500, and 3000 XP\n\nMandatory actions don't grant XP but are required to unlock other levels. You can track your progress on the Dashboard and redeem XP for rewards!";
-    }
-    
-    // XP milestones
-    if (message.includes('milestone') || message.includes('xp milestone')) {
-      return "There are four key XP milestones: 🎯\n\n• 500 XP - First milestone\n• 1000 XP - Second milestone\n• 1500 XP - Third milestone\n• 3000 XP - Final milestone\n\nReaching these milestones unlocks new opportunities and recognition within the partner program. Your progress is tracked on your dashboard and throughout the platform.";
-    }
-    
-    // Rewards related
-    if (message.includes('reward') || message.includes('redeem') || message.includes('prize') || message.includes('tier')) {
-      return "Great question about rewards! 🎁\n\nWe offer 5 reward tiers: $30, $50, $70, $85, and $100 in prizes including:\n• Amazon Gift Cards\n• Spotify Premium subscriptions\n• Netflix subscriptions\n• Canva Pro access\n• Coaching sessions\n• Course vouchers\n• And more!\n\nTo redeem: Contact your partner manager once you've earned enough XP. Higher tiers offer better value and more premium rewards!";
-    }
-    
-    // Getting started (check before general navigation)
-    if (message.includes('start') || message.includes('begin') || message.includes('new') || message.includes('first')) {
-      return "Welcome to your partner journey! 🚀\n\nGetting started steps:\n1. Complete KYC verification (Mandatory)\n2. Set up your payment method (Mandatory)\n3. Start the Level-Up Journey\n4. Begin with Medium level actions\n5. Track your XP progress on Dashboard\n\nFirst goal: Complete Mandatory level, then aim for your first 500 XP!\n\nNeed help with any specific step?";
-    }
-    
-    // Client acquisition
-    if (message.includes('client') || message.includes('customer') || message.includes('referral') || message.includes('bring clients')) {
-      return "Bringing clients is key to your success! 🎯\n\nTips for client acquisition:\n• Complete the 'Getting our first clients (The fishing formula)' lesson\n• Focus on building trust and providing value\n• Identify your target audience\n• Create compelling content\n• Leverage your network\n\nGoal: Bring 5 clients to earn 500 XP in the Medium level!\n\nThe fishing formula lesson covers proven strategies including targeting and relationship building.";
-    }
-    
-    // Sub-affiliates
-    if (message.includes('sub-affiliate') || message.includes('recruit') || message.includes('partner')) {
-      return "Sub-affiliates are partners you recruit under your referral! 👥\n\nWhat counts as a sub-affiliate:\n• Someone you recruit who becomes a partner\n• They should be actively promoting our products\n• They're engaged in the partner program\n\nGoal: Bring 5 sub-affiliates to earn 500 XP in the Medium level!\n\nThis helps build your network and increases your earning potential.";
-    }
-    
-    // KYC related
-    if (message.includes('kyc') || message.includes('verification') || message.includes('documents') || message.includes('trouble')) {
-      return "KYC (Know Your Customer) verification is required in the Mandatory level! 📋\n\nTips for successful KYC:\n• Ensure documents are clear and valid\n• Make sure names match your account info\n• Avoid blurry photos or expired documents\n• Upload government-issued ID\n\nCommon issues: blurry photos, expired documents, or mismatched names.\n\nIf you're having trouble, contact support with specific error messages for personalized assistance!";
-    }
-    
-    // Payment method
-    if (message.includes('payment') || message.includes('payout') || message.includes('commission')) {
-      return "Setting up your payment method is crucial for receiving commissions! 💳\n\nSteps:\n1. Go to account settings\n2. Navigate to payment methods\n3. Add bank account, e-wallet, or supported option\n4. Ensure it matches your verified identity\n\nCommission calculation depends on client trading activity and deposits. Detailed commission structures are available in your partner dashboard and through your partner manager!";
-    }
-    
-    // Progress tracking
-    if (message.includes('track') || message.includes('progress') || message.includes('real-time')) {
-      return "Yes! You can track your progress in real-time! 📊\n\nYour dashboard provides:\n• Real-time XP updates\n• Completed actions count\n• Leaderboard ranking\n• Overall progress tracking\n• XP progress bar with milestones\n\nAll your achievements and statistics are updated automatically as you complete actions in your Level-Up Journey!";
-    }
-    
-    // Support questions
-    if (message.includes('support') || message.includes('help') || message.includes('contact')) {
-      return "We provide comprehensive support! 🤝\n\nAvailable support:\n• Level-Up Journey curriculum\n• Regular coaching sessions\n• Marketing materials\n• Dedicated partner manager support\n• Community forums\n• Regular webinars and training sessions\n\nFor specific issues:\n• General questions: Start with FAQs\n• Account issues: Contact your partner manager\n• Technical problems: Support team via help desk\n• Reward redemptions: Coordinate with partner manager";
-    }
-    
-    // Leaderboard
-    if (message.includes('leaderboard') || message.includes('ranking') || message.includes('position')) {
-      return "The Leaderboard shows your ranking among all partners! 🏆\n\nYou can find it in the 'XP & Leaderboard' section. It displays:\n• Your current rank\n• Top performers\n• XP comparison with other partners\n\nClimb the ranks by completing more actions in your Level-Up Journey and earning XP!";
-    }
-    
-    // Navigation help (moved to end so specific questions are caught first)
-    if (message.includes('navigate') || message.includes('find') || message.includes('where') || (message.includes('how to') && !message.includes('level'))) {
-      return "I can help you navigate the Partner Academy! 🧭\n\nMain sections:\n• Dashboard: Your progress overview\n• Level-Up Journey: Complete actions to earn XP\n• XP & Leaderboard: Track progress and see rankings\n• Rewards: Redeem XP for prizes\n• FAQs: Common questions answered\n• Profile: Your account settings\n\nWhat specific section would you like help with?";
-    }
-    
-    // Default response for unrelated queries
-    return "I'm your Partner Academy Assistant and I'm here to help with questions about:\n\n• Level-Up Journey and curriculum\n• XP earning and milestones\n• Rewards and redemption\n• Client acquisition strategies\n• KYC and payment setup\n• Progress tracking\n• Support options\n• Navigation through the platform\n\nI'm specifically designed to help with Partner Academy topics. For other questions, please contact your partner manager or support team. How can I help you with your partner journey?";
+    return parts.map((part, index) => {
+      if (part.startsWith('**') && part.endsWith('**')) {
+        // Remove ** and make bold
+        const boldText = part.slice(2, -2);
+        return (
+          <Text as="span" key={index} fontWeight="bold">
+            {boldText}
+          </Text>
+        );
+      }
+      return part;
+    });
   };
 
-  const handleSendMessage = () => {
+  // Get chat window dimensions based on expanded state
+  const getChatDimensions = () => {
+    if (isExpanded) {
+      return {
+        width: Math.min(600, window.innerWidth - 40),
+        height: Math.min(700, window.innerHeight - 40)
+      };
+    }
+    return {
+      width: 380,
+      height: 500
+    };
+  };
+
+  const chatDimensions = getChatDimensions();
+
+  // System prompt with comprehensive Partner Academy knowledge
+  const getSystemPrompt = () => {
+    return `You are a helpful AI assistant for the Deriv Partner Activation Academy. You ONLY answer questions related to the Partner Academy, partner program, and Deriv partnership topics.
+
+IMPORTANT GUIDELINES:
+- Keep responses concise and to the point. Aim for 2-3 sentences maximum unless specifically asked for detailed explanations.
+- ONLY answer questions about Partner Academy topics listed below
+- If asked about anything unrelated to the Partner Academy (anime, general topics, comparisons to non-partner subjects, etc.), politely decline and redirect to partner-related topics
+- Do NOT engage with off-topic questions, even if they mention "Deriv Partners" in comparison to unrelated subjects
+
+PARTNER ACADEMY KNOWLEDGE BASE:
+
+LEVEL-UP JOURNEY STRUCTURE:
+- 4 Levels: Mandatory, Medium, High, PRO
+- Mandatory Level: Complete KYC & Set Payment Method (0 XP - required foundation)
+- Medium Level: Bring 5 clients (500 XP) & Bring 5 sub-affiliates (500 XP)
+- High Level: Earn $50 USD commissions (600 XP) & Earn $500 trading volume (600 XP)
+- PRO Level: Earn $200 USD commissions (2500 XP) & Earn $1000 trading volume (2500 XP)
+
+XP SYSTEM:
+- XP Milestones: 500, 1000, 1500, 3000 XP
+- Medium Level actions: 500 XP each
+- High Level actions: 600 XP each
+- PRO Level actions: 2500 XP each
+- Mandatory actions don't grant XP but unlock other levels
+
+REWARDS SYSTEM:
+- 5 reward tiers: $30, $50, $70, $85, $100
+- Rewards include: Amazon Gift Cards, Spotify Premium, Netflix, Canva Pro, coaching sessions, course vouchers
+- Contact partner manager to redeem rewards
+- Higher tiers offer better value
+
+NAVIGATION STRUCTURE:
+- Dashboard: Progress overview and XP tracking
+- Level-Up Journey: Complete actions to earn XP
+- XP & Leaderboard: Track progress and see rankings
+- Rewards: Redeem XP for prizes
+- FAQs: Common questions answered
+- Profile: Account settings
+- Admin Dashboard: For Deriv staff only
+
+COMMON PROCESSES:
+- KYC: Upload clear, valid documents that match account info
+- Payment Setup: Add bank account/e-wallet in account settings
+- Client Acquisition: Use "The fishing formula" lesson, build trust, provide value
+- Sub-affiliates: Recruit partners under your referral who actively promote
+- Commission Tracking: Based on client trading activity and deposits
+
+SUPPORT AVAILABLE:
+- Level-Up Journey curriculum
+- Regular coaching sessions
+- Marketing materials
+- Dedicated partner manager support
+- Community forums
+- Regular webinars and training
+
+TIMELINE EXPECTATIONS:
+- Mandatory level: Few days
+- Medium/High/PRO levels: Depends on client acquisition success
+- Most active partners: Significant progress within 3-6 months
+
+For questions outside the Partner Academy scope, respond with: "I'm here to help with Partner Academy questions only. Feel free to ask about the Level-Up Journey, XP system, rewards, or how to succeed as a Deriv partner!"
+
+Always provide helpful, accurate information based on this knowledge. Keep responses brief and actionable. Be encouraging and supportive in your responses about partner-related topics. Use **bold text** for emphasis on important points.`;
+  };
+
+  // Animated thinking component
+  const ThinkingAnimation = () => {
+    const [dots, setDots] = useState('');
+
+    useEffect(() => {
+      const interval = setInterval(() => {
+        setDots(prev => {
+          if (prev === '...') return '';
+          return prev + '.';
+        });
+      }, 500);
+
+      return () => clearInterval(interval);
+    }, []);
+
+    return (
+      <Flex justify="flex-start">
+        <Box
+          bg="gray.100"
+          px={3}
+          py={2}
+          borderRadius="lg"
+          fontSize="sm"
+          maxW="90%"
+          wordBreak="break-word"
+          minW="80px"
+        >
+          <HStack spacing={2}>
+            <Box
+              w="6px"
+              h="6px"
+              bg="gray.400"
+              borderRadius="full"
+              animation="pulse 1.5s ease-in-out infinite"
+            />
+            <Box
+              w="6px"
+              h="6px"
+              bg="gray.400"
+              borderRadius="full"
+              animation="pulse 1.5s ease-in-out infinite 0.2s"
+            />
+            <Box
+              w="6px"
+              h="6px"
+              bg="gray.400"
+              borderRadius="full"
+              animation="pulse 1.5s ease-in-out infinite 0.4s"
+            />
+            <Text color="gray.600" fontSize="xs">
+              AI is thinking{dots}
+            </Text>
+          </HStack>
+        </Box>
+      </Flex>
+    );
+  };
+
+  // Make API call to OpenAI
+  const getAIResponse = async (userMessage, conversationHistory) => {
+    try {
+      setError(null);
+      
+      // Prepare messages for the API
+      const apiMessages = [
+        {
+          role: 'system',
+          content: getSystemPrompt()
+        },
+        // Include recent conversation history for context
+        ...conversationHistory.slice(-6).map(msg => ({
+          role: msg.type === 'user' ? 'user' : 'assistant',
+          content: msg.content
+        })),
+        {
+          role: 'user',
+          content: userMessage
+        }
+      ];
+
+      const response = await fetch('https://litellm.deriv.ai/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer sk-0Iij8j4us7flGztjsEYBHw`
+        },
+        body: JSON.stringify({
+          model: 'gpt-4.1-mini',
+          messages: apiMessages,
+          max_tokens: 200,
+          temperature: 0.7,
+          stream: false
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`API request failed: ${response.status} ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      
+      if (data.choices && data.choices[0] && data.choices[0].message) {
+        return data.choices[0].message.content;
+      } else {
+        throw new Error('Invalid response format from API');
+      }
+    } catch (error) {
+      console.error('Error calling OpenAI API:', error);
+      setError('Sorry, I encountered an error. Please try again.');
+      
+      // Fallback response
+      return "I apologize, but I'm having trouble connecting to my AI service right now. Please try asking your question again, or contact your partner manager for immediate assistance with Partner Academy questions.";
+    }
+  };
+
+  const handleSendMessage = async () => {
     if (!inputValue.trim()) return;
 
     const userMessage = {
@@ -147,24 +291,40 @@ const AIAssistant = () => {
       timestamp: new Date()
     };
 
+    const currentInput = inputValue;
     setMessages(prev => [...prev, userMessage]);
     setInputValue('');
     setIsTyping(true);
 
-    setTimeout(() => {
+    try {
+      // Get AI response with conversation history
+      const aiResponse = await getAIResponse(currentInput, messages);
+      
       const botResponse = {
         id: messages.length + 2,
         type: 'bot',
-        content: getAIResponse(inputValue),
+        content: aiResponse,
         timestamp: new Date()
       };
+      
       setMessages(prev => [...prev, botResponse]);
+    } catch (error) {
+      console.error('Error getting AI response:', error);
+      const errorResponse = {
+        id: messages.length + 2,
+        type: 'bot',
+        content: "I apologize, but I'm having trouble processing your request right now. Please try again or contact your partner manager for assistance.",
+        timestamp: new Date()
+      };
+      setMessages(prev => [...prev, errorResponse]);
+    } finally {
       setIsTyping(false);
-    }, 1000);
+    }
   };
 
   const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
       handleSendMessage();
     }
   };
@@ -201,11 +361,12 @@ const AIAssistant = () => {
           position="fixed"
           bottom="20px"
           right="20px"
-          w="380px"
-          h="500px"
+          w={`${chatDimensions.width}px`}
+          h={`${chatDimensions.height}px`}
           maxW="calc(100vw - 40px)"
           maxH="calc(100vh - 40px)"
           zIndex={999}
+          transition="all 0.3s ease-in-out"
         >
           <Card bg={cardBg} boxShadow="2xl" borderRadius="lg" h="full" overflow="hidden">
             {/* Header */}
@@ -214,11 +375,20 @@ const AIAssistant = () => {
                 <HStack>
                   <Avatar size="sm" bg="blue.500" icon={<FiMessageCircle />} />
                   <VStack align="start" spacing={0}>
-                    <Text fontWeight="bold" fontSize="sm">Partner Assistant</Text>
-                    <Badge colorScheme="green" size="sm">Online</Badge>
+                    <Text fontWeight="bold" fontSize="sm">AI Partner Assistant</Text>
+                    <Badge colorScheme="green" size="sm">Powered by GPT-4</Badge>
                   </VStack>
                 </HStack>
                 <HStack spacing={1}>
+                  <IconButton
+                    icon={isExpanded ? <FiMinimize2 /> : <FiMaximize2 />}
+                    size="sm"
+                    variant="ghost"
+                    onClick={toggleExpanded}
+                    _hover={{ bg: 'blue.50', color: 'blue.500' }}
+                    aria-label={isExpanded ? "Minimize chat" : "Expand chat"}
+                    title={isExpanded ? "Minimize" : "Expand"}
+                  />
                   <IconButton
                     icon={<FiTrash2 />}
                     size="sm"
@@ -241,6 +411,14 @@ const AIAssistant = () => {
             </CardHeader>
 
             <Divider />
+
+            {/* Error Alert */}
+            {error && (
+              <Alert status="error" size="sm">
+                <AlertIcon />
+                <Text fontSize="xs">{error}</Text>
+              </Alert>
+            )}
 
             {/* Messages */}
             <CardBody p={0} display="flex" flexDirection="column" overflow="hidden">
@@ -282,26 +460,12 @@ const AIAssistant = () => {
                         lineHeight="1.4"
                         width="fit-content"
                       >
-                        {message.content}
+                        {message.type === 'bot' ? formatMessage(message.content) : message.content}
                       </Box>
                     </Flex>
                   ))}
                   
-                  {isTyping && (
-                    <Flex justify="flex-start">
-                      <Box
-                        bg="gray.100"
-                        px={3}
-                        py={2}
-                        borderRadius="lg"
-                        fontSize="sm"
-                        maxW="90%"
-                        wordBreak="break-word"
-                      >
-                        <Text>Assistant is typing...</Text>
-                      </Box>
-                    </Flex>
-                  )}
+                  {isTyping && <ThinkingAnimation />}
                   <div ref={messagesEndRef} />
                 </VStack>
               </Box>
@@ -310,21 +474,23 @@ const AIAssistant = () => {
               <Box p={3} borderTop="1px" borderColor={borderColor} flexShrink={0}>
                 <HStack spacing={2}>
                   <Input
-                    placeholder="Ask about Level-Up Journey, XP, Rewards..."
+                    placeholder="Ask me anything about the Partner Academy..."
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
                     onKeyPress={handleKeyPress}
                     size="sm"
                     fontSize="sm"
                     flex="1"
+                    isDisabled={isTyping}
                   />
                   <IconButton
                     icon={<FiSend />}
                     onClick={handleSendMessage}
                     colorScheme="blue"
                     size="sm"
-                    isDisabled={!inputValue.trim()}
+                    isDisabled={!inputValue.trim() || isTyping}
                     flexShrink={0}
+                    isLoading={isTyping}
                   />
                 </HStack>
               </Box>
