@@ -17,17 +17,22 @@ app = FastAPI(title="Partner Activation Academy API")
 ENVIRONMENT = os.environ.get("ENVIRONMENT", "development")
 FRONTEND_URL = os.environ.get("FRONTEND_URL", "http://localhost:3000")
 
-# Configure CORS
-allowed_origins = [
-    FRONTEND_URL,
-    "https://activation-livid.vercel.app",  # Add your Vercel domain explicitly
-    "http://localhost:3000"
-]
+# Configure CORS - Allow all origins for public access
+if ENVIRONMENT == "production":
+    # In production, allow all origins for public access
+    allowed_origins = ["*"]
+else:
+    # In development, be more restrictive
+    allowed_origins = [
+        FRONTEND_URL,
+        "https://activation-livid.vercel.app",
+        "http://localhost:3000"
+    ]
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=allowed_origins,
-    allow_credentials=True,
+    allow_credentials=False if ENVIRONMENT == "production" else True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
