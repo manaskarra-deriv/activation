@@ -224,7 +224,7 @@ Always provide helpful, accurate information based on this knowledge. Keep respo
     );
   };
 
-  // Make API call to OpenAI
+  // Make API call to Python backend
   const getAIResponse = async (userMessage, conversationHistory) => {
     try {
       setError(null);
@@ -246,34 +246,35 @@ Always provide helpful, accurate information based on this knowledge. Keep respo
         }
       ];
 
-      const response = await fetch('https://litellm.deriv.ai/v1/chat/completions', {
+      // Get backend URL from environment or use default
+      const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
+      
+      const response = await fetch(`${backendUrl}/ai/chat`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer sk-0Iij8j4us7flGztjsEYBHw`
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          model: 'gpt-4.1-mini',
           messages: apiMessages,
           max_tokens: 200,
-          temperature: 0.7,
-          stream: false
+          temperature: 0.7
         })
       });
 
       if (!response.ok) {
-        throw new Error(`API request failed: ${response.status} ${response.statusText}`);
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.detail || `Backend request failed: ${response.status} ${response.statusText}`);
       }
 
       const data = await response.json();
       
-      if (data.choices && data.choices[0] && data.choices[0].message) {
-        return data.choices[0].message.content;
+      if (data.message) {
+        return data.message;
       } else {
-        throw new Error('Invalid response format from API');
+        throw new Error('Invalid response format from backend');
       }
     } catch (error) {
-      console.error('Error calling OpenAI API:', error);
+      console.error('Error calling backend AI API:', error);
       setError('Sorry, I encountered an error. Please try again.');
       
       // Fallback response

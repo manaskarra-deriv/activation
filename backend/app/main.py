@@ -5,6 +5,11 @@ from typing import List, Optional
 import uuid
 from datetime import datetime
 import os
+from dotenv import load_dotenv
+import httpx
+
+# Load environment variables from .env file
+load_dotenv()
 
 app = FastAPI(title="Partner Activation Academy API")
 
@@ -158,6 +163,15 @@ class UserProgress(BaseModel):
     completed: bool = False
     score: Optional[int] = None
 
+class ChatMessage(BaseModel):
+    role: str
+    content: str
+
+class ChatRequest(BaseModel):
+    messages: List[ChatMessage]
+    max_tokens: Optional[int] = 200
+    temperature: Optional[float] = 0.7
+
 # Routes
 @app.get("/")
 def read_root():
@@ -261,5 +275,60 @@ def update_progress(progress: UserProgress, user_id: str):
                 user["current_module"] = next_module_id
     
     return {"success": True, "user": user}
+
+@app.post("/ai/chat")
+async def ai_chat(chat_request: ChatRequest):
+    try:
+        # Get API credentials from environment variables
+        api_key = os.getenv("OPENAI_API_KEY")
+        api_base_url = os.getenv("API_BASE_URL", "https://litellm.deriv.ai/v1")
+        model_name = os.getenv("OPENAI_MODEL_NAME", "gpt-4.1-mini")
+        
+        if not api_key:
+            raise HTTPException(status_code=500, detail="OpenAI API key not configured")
+        
+        # Prepare the request payload
+        payload = {
+            "model": model_name,
+            "messages": [{"role": msg.role, "content": msg.content} for msg in chat_request.messages],
+            "max_tokens": chat_request.max_tokens,
+            "temperature": chat_request.temperature,
+            "stream": False
+        }
+        
+        # Make the API call
+        async with httpx.AsyncClient() as client:
+            response = await client.post(
+                f"{api_base_url}/chat/completions",
+                headers={
+                    "Content-Type": "application/json",
+                    "Authorization": f"Bearer {api_key}"
+                },
+                json=payload,
+                timeout=30.0
+            )
+            
+            if response.status_code != 200:
+                raise HTTPException(
+                    status_code=response.status_code, 
+                    detail=f"OpenAI API error: {response.text}"
+                )
+            
+            result = response.json()
+            
+            if "choices" not in result or not result["choices"]:
+                raise HTTPException(status_code=500, detail="Invalid response from OpenAI API")
+            
+            return {
+                "message": result["choices"][0]["message"]["content"],
+                "usage": result.get("usage", {})
+            }
+            
+    except httpx.TimeoutException:
+        raise HTTPException(status_code=504, detail="Request timeout - AI service took too long to respond")
+    except httpx.RequestError as e:
+        raise HTTPException(status_code=500, detail=f"Request error: {str(e)}")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Unexpected error: {str(e)}")
 
 # Run with: uvicorn app.main:app --reload 
