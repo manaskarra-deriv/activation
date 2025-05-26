@@ -139,10 +139,10 @@ const Dashboard = () => {
                   <Stack spacing={4}>
                     <Flex align="center">
                       <Icon as={FiTrendingUp} color="green.500" boxSize={5} mr={2} />
-                      <Text fontWeight="bold">Earn XP & Badges</Text>
+                      <Text fontWeight="bold">Complete Actions & Earn Rewards</Text>
                     </Flex>
                     <Text fontSize="sm">
-                      Every task, quiz, and milestone earns you experience points and unlocks exclusive badges to showcase your expertise.
+                      Complete actions to earn XP and unlock exclusive rewards including gift cards, subscriptions, and coaching sessions.
                     </Text>
                   </Stack>
                 </CardBody>
@@ -154,32 +154,26 @@ const Dashboard = () => {
               <List spacing={3}>
                 <ListItem>
                   <Flex align="center">
-                    <Badge colorScheme="purple" px={2} mr={2}>Level 0</Badge>
-                    <Text fontWeight="medium">Orientation & Setup</Text>
+                    <Badge colorScheme="gray" px={2} mr={2} minW="140px">Mandatory</Badge>
+                    <Text fontWeight="medium">Complete KYC & Set Payment Method</Text>
                   </Flex>
                 </ListItem>
                 <ListItem>
                   <Flex align="center">
-                    <Badge colorScheme="blue" px={2} mr={2}>Level 1</Badge>
-                    <Text fontWeight="medium">Know the Products</Text>
+                    <Badge colorScheme="yellow" px={2} mr={2} minW="140px">Medium</Badge>
+                    <Text fontWeight="medium">Bring 5 clients & 5 sub-affiliates</Text>
                   </Flex>
                 </ListItem>
                 <ListItem>
                   <Flex align="center">
-                    <Badge colorScheme="teal" px={2} mr={2}>Level 2</Badge>
-                    <Text fontWeight="medium">Promo Tools Mastery</Text>
+                    <Badge colorScheme="orange" px={2} mr={2} minW="140px">High</Badge>
+                    <Text fontWeight="medium">Earn $50 commissions & $500 trading volume</Text>
                   </Flex>
                 </ListItem>
                 <ListItem>
                   <Flex align="center">
-                    <Badge colorScheme="green" px={2} mr={2}>Level 3</Badge>
-                    <Text fontWeight="medium">First Clicks Challenge</Text>
-                  </Flex>
-                </ListItem>
-                <ListItem>
-                  <Flex align="center">
-                    <Badge colorScheme="orange" px={2} mr={2}>Level 4</Badge>
-                    <Text fontWeight="medium">First Referral Mastery</Text>
+                    <Badge colorScheme="purple" px={2} mr={2} minW="140px">PRO</Badge>
+                    <Text fontWeight="medium">Earn $200 commissions & $1000 trading volume</Text>
                   </Flex>
                 </ListItem>
               </List>
