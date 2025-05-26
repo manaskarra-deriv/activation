@@ -250,7 +250,7 @@ Always provide helpful, accurate information based on this knowledge. Keep respo
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer sk-0Iij8j4us7flGztjsEYBHw`
+          'Authorization': `Bearer 
         },
         body: JSON.stringify({
           model: 'gpt-4.1-mini',
