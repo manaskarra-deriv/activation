@@ -19,19 +19,27 @@ import {
   FiUser,
   FiBarChart2,
   FiLayers,
-  FiTrendingUp
+  FiTrendingUp,
+  FiHelpCircle,
+  FiSettings
 } from 'react-icons/fi';
 import { NavLink as RouterLink } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import XPProgressBar from './XPProgressBar';
 
 // Navigation items
 const navItems = [
   { name: 'Dashboard', icon: FiHome, path: '/' },
   { name: 'Level-Up Journey', icon: FiLayers, path: '/curriculum' },
-  { name: 'Modules', icon: FiBook, path: '/modules' },
-  { name: 'Rewards & XP', icon: FiTrendingUp, path: '/gamification' },
-  { name: 'Leaderboard', icon: FiBarChart2, path: '/leaderboard' },
+  { name: 'XP & Leaderboard', icon: FiTrendingUp, path: '/gamification' },
+  { name: 'Rewards', icon: FiAward, path: '/rewards' },
+  { name: 'FAQs', icon: FiHelpCircle, path: '/faqs' },
   { name: 'Profile', icon: FiUser, path: '/profile' },
+];
+
+// Admin navigation items
+const adminItems = [
+  { name: 'Admin Dashboard', icon: FiSettings, path: '/admin' },
 ];
 
 const Sidebar = ({ isOpen, onClose }) => {
@@ -43,6 +51,9 @@ const Sidebar = ({ isOpen, onClose }) => {
   const progressPercent = user?.modules_completed?.length 
     ? (user.modules_completed.length / 5) * 100 
     : 0;
+
+  // Check if user is admin (for now, we'll assume all users can see admin for demo)
+  const isAdmin = true; // TODO: Replace with actual admin check
   
   return (
     <Box
@@ -66,10 +77,18 @@ const Sidebar = ({ isOpen, onClose }) => {
 
       <Box px={4} pb={4}>
         <Heading size="sm" mb={2}>My Progress</Heading>
-        <Progress value={progressPercent} size="sm" colorScheme="brand" borderRadius="full" mb={2} />
+        <Box mb={2}>
+          <Progress 
+            value={(user?.xp || 750) / 30} // Scale to percentage (750/3000 * 100 = 25%)
+            size="sm" 
+            colorScheme="red" 
+            borderRadius="full" 
+            bg="gray.200"
+          />
+        </Box>
         <Flex justify="space-between" fontSize="sm">
-          <Text>{user?.modules_completed?.length || 0}/5 modules</Text>
-          <Text>{progressPercent.toFixed(0)}% complete</Text>
+          <Text>{user?.xp || 750} XP earned</Text>
+          <Badge colorScheme="brand">{user?.level || 'Apprentice'}</Badge>
         </Flex>
       </Box>
       
@@ -89,53 +108,37 @@ const Sidebar = ({ isOpen, onClose }) => {
           ))}
         </VStack>
       </Box>
-      
-      <Divider />
-      
-      <Box px={4} py={4}>
-        <Heading size="sm" mb={2}>My Badges</Heading>
-        <Flex wrap="wrap" gap={2}>
-          {user?.badges?.map((badge, i) => (
-            <Badge 
-              key={i} 
-              colorScheme="accent" 
-              p={2} 
-              borderRadius="md"
-              fontSize="xs"
-            >
-              <Flex align="center">
-                <Icon as={FiAward} mr={1} />
-                {badge}
-              </Flex>
-            </Badge>
-          ))}
-          {(!user?.badges || user.badges.length === 0) && (
-            <Text fontSize="sm" color="gray.500">
-              Complete modules to earn badges
-            </Text>
-          )}
-        </Flex>
-      </Box>
-      
-      <Divider />
-      
-      <Box px={4} py={4}>
-        <Heading size="sm" mb={2}>Fast Track to Silver</Heading>
-        <Progress value={70} size="sm" colorScheme="yellow" borderRadius="full" mb={2} />
-        <Flex justify="space-between" fontSize="sm">
-          <Text>Level 2/5</Text>
-          <Text>3 more to go</Text>
-        </Flex>
-        <Text fontSize="xs" color="gray.500" mt={2}>
-          Complete all levels to fast-track to Silver tier
-        </Text>
-      </Box>
+
+      {/* Admin Section */}
+      {isAdmin && (
+        <>
+          <Divider />
+          <Box px={4} py={4}>
+            <Heading size="xs" mb={3} color="gray.500" textTransform="uppercase" letterSpacing="wider">
+              Administration
+            </Heading>
+            <VStack align="stretch" spacing={1}>
+              {adminItems.map((item) => (
+                <NavItem
+                  key={item.name}
+                  icon={item.icon}
+                  path={item.path}
+                  onClose={onClose}
+                  isAdmin={true}
+                >
+                  {item.name}
+                </NavItem>
+              ))}
+            </VStack>
+          </Box>
+        </>
+      )}
     </Box>
   );
 };
 
 // NavItem component
-const NavItem = ({ icon, path, children, onClose }) => {
+const NavItem = ({ icon, path, children, onClose, isAdmin = false }) => {
   return (
     <Box
       as={RouterLink}
@@ -156,8 +159,8 @@ const NavItem = ({ icon, path, children, onClose }) => {
         role="group"
         cursor="pointer"
         _hover={{
-          bg: 'brand.50',
-          color: 'brand.600',
+          bg: isAdmin ? 'orange.50' : 'brand.50',
+          color: isAdmin ? 'orange.600' : 'brand.600',
         }}
       >
         <Icon
@@ -165,7 +168,7 @@ const NavItem = ({ icon, path, children, onClose }) => {
           fontSize="18"
           as={icon}
           _groupHover={{
-            color: 'brand.600',
+            color: isAdmin ? 'orange.600' : 'brand.600',
           }}
         />
         {children}

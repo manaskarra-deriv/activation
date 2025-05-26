@@ -92,7 +92,7 @@ const Modules = () => {
             // Loading skeletons
             Array(5).fill(0).map((_, i) => (
               <Box key={i} borderWidth="1px" borderRadius="lg" overflow="hidden">
-                <Stack spacing={4} p={6}>
+                <Stack spacing={4} p={6}> 
                   <Skeleton height="20px" width="70%" />
                   <Skeleton height="14px" width="100%" />
                   <Skeleton height="14px" width="90%" />

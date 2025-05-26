@@ -62,230 +62,154 @@ const Curriculum = () => {
         // For now using mock data
         const mockLevels = [
           {
-            id: '0',
-            title: 'Orientation & Setup',
-            description: 'Get familiar with Partner Hub, affiliate dashboard, and tools',
-            xp_reward: 100,
-            badge: 'Orientation Complete',
+            id: 'mandatory',
+            title: 'Account Setup & Verification',
+            description: 'Complete KYC and Set a Payment Method',
+            xp_reward: 0,
+            badge: 'Setup Complete',
             modules: [
               {
                 id: '1',
-                title: 'Partner Hub Walkthrough',
-                type: 'video',
-                duration: '5 min',
-                status: 'completed'
+                title: 'Complete KYC',
+                type: 'task',
+                duration: '10 min',
+                status: 'completed',
+                subModules: [
+                  { title: 'KYC essentials', type: 'lesson' }
+                ]
               },
               {
                 id: '2',
-                title: 'Complete Your Profile',
+                title: 'Set a Payment Method',
                 type: 'task',
-                duration: '10 min',
-                status: 'completed'
-              },
-              {
-                id: '3',
-                title: 'Join Partner Telegram Group',
-                type: 'task',
-                duration: '2 min',
-                status: 'completed'
-              },
-              {
-                id: '4',
-                title: 'Introduction to Deriv Ecosystem',
-                type: 'video',
-                duration: '8 min',
-                status: 'completed'
-              },
-              {
-                id: '5',
-                title: 'Orientation Quiz',
-                type: 'quiz',
-                questions: 5,
-                pass_rate: 80,
-                status: 'completed'
+                duration: '5 min',
+                status: 'completed',
+                subModules: [
+                  { title: 'How to Change Payment Methods', type: 'lesson' },
+                  { title: 'How to Withdraw', type: 'lesson' }
+                ]
               }
             ],
             progress: 100,
             status: 'completed',
-            unlocks: 'Access to Level 1'
+            unlocks: 'Access to Medium Level'
           },
           {
-            id: '1',
-            title: 'Know the Products',
-            description: 'Learn about CFDs, Options, Multipliers, and Synthetic indices',
-            xp_reward: 150,
-            badge: 'Product Expert',
+            id: 'medium',
+            title: 'Client & Network Building',
+            description: 'Bring your first clients and sub-affiliates',
+            xp_reward: 1000,
+            badge: 'Client Builder',
             modules: [
               {
-                id: '6',
-                title: 'CFDs vs Options vs Multipliers',
-                type: 'interactive',
-                duration: '15 min',
-                status: 'completed'
+                id: '3',
+                title: 'Bring your first 5 clients',
+                type: 'task',
+                duration: 'varies',
+                status: 'in_progress',
+                xp_reward: 500,
+                specification: 'with real accounts',
+                subModules: [
+                  { title: 'Getting our first clients (The fishing formula)', type: 'lesson' },
+                  { title: '07 How to track your clients', type: 'lesson' },
+                  { title: 'MYDAS - Master Your Deriv Affiliate Success', type: 'lesson' }
+                ]
               },
               {
+                id: '4',
+                title: 'Bring your first 5 sub-affiliates',
+                type: 'task',
+                duration: 'varies',
+                status: 'locked',
+                xp_reward: 500,
+                subModules: [
+                  { title: 'How Master Partner Programme Works', type: 'lesson' },
+                  { title: 'How to become a Master Partner', type: 'lesson' },
+                  { title: 'How to track Master Partner Earnings', type: 'lesson' }
+                ]
+              }
+            ],
+            progress: 50,
+            status: 'in_progress',
+            unlocks: 'Access to High Level'
+          },
+          {
+            id: 'high',
+            title: 'Revenue Generation',
+            description: 'Earn your first commissions and trading volume',
+            xp_reward: 1200,
+            badge: 'Revenue Generator',
+            modules: [
+              {
+                id: '5',
+                title: 'Earn your first 50 USD commissions',
+                type: 'task',
+                duration: 'varies',
+                status: 'locked',
+                xp_reward: 600,
+                subModules: [
+                  { title: 'Intro to Deriv Commissions', type: 'lesson' },
+                  { title: 'How commissions are calculated', type: 'lesson' },
+                  { title: 'Revenue Share', type: 'lesson' },
+                  { title: 'TurnOver', type: 'lesson' },
+                  { title: 'IB (CFD commissions)', type: 'lesson' },
+                  { title: '04 How to track your commissions', type: 'lesson' }
+                ]
+              },
+              {
+                id: '6',
+                title: 'Earn your first 500 USD in trading volume',
+                type: 'task',
+                duration: 'varies',
+                status: 'locked',
+                xp_reward: 600,
+                subModules: [
+                  { title: '03 Understanding your metrics', type: 'lesson' }
+                ]
+              }
+            ],
+            progress: 0,
+            status: 'locked',
+            unlocks: 'Access to PRO Level'
+          },
+          {
+            id: 'pro',
+            title: 'Advanced Partnership',
+            description: 'Achieve significant commission and trading volume milestones',
+            xp_reward: 5000,
+            badge: 'PRO Partner',
+            modules: [
+              {
                 id: '7',
-                title: 'Synthetic Indices Explained',
-                type: 'video',
-                duration: '10 min',
-                status: 'in_progress'
+                title: 'Earn your first 200 USD commissions',
+                type: 'task',
+                duration: 'varies',
+                status: 'locked',
+                xp_reward: 2500,
+                subModules: [
+                  { title: 'Intro to Deriv Commissions', type: 'lesson' },
+                  { title: 'How commissions are calculated', type: 'lesson' },
+                  { title: 'Revenue Share', type: 'lesson' },
+                  { title: 'TurnOver', type: 'lesson' },
+                  { title: 'IB (CFD commissions)', type: 'lesson' },
+                  { title: '04 How to track your commissions', type: 'lesson' }
+                ]
               },
               {
                 id: '8',
-                title: 'Popular Markets Overview',
-                type: 'interactive',
-                duration: '12 min',
-                status: 'locked'
-              },
-              {
-                id: '9',
-                title: 'Product Matching Exercise',
-                type: 'task',
-                duration: '8 min',
-                status: 'locked'
-              },
-              {
-                id: '10',
-                title: 'Products Quiz',
-                type: 'quiz',
-                questions: 10,
-                pass_rate: 70,
-                status: 'locked'
-              }
-            ],
-            progress: 40,
-            status: 'in_progress',
-            unlocks: 'Certificate + Access to Level 2'
-          },
-          {
-            id: '2',
-            title: 'Promo Tools Mastery',
-            description: 'Learn how to use Smartlinks, banners, and tracking referrals',
-            xp_reward: 200,
-            badge: 'Promo Tools Master',
-            modules: [
-              {
-                id: '11',
-                title: 'Smartlink Walkthrough',
-                type: 'interactive',
-                duration: '10 min',
-                status: 'locked'
-              },
-              {
-                id: '12',
-                title: 'Banner Placements',
-                type: 'video',
-                duration: '8 min',
-                status: 'locked'
-              },
-              {
-                id: '13',
-                title: 'Tracking Referrals Demo',
-                type: 'interactive',
-                duration: '15 min',
-                status: 'locked'
-              },
-              {
-                id: '14',
-                title: 'Create Your First Smartlink',
-                type: 'task',
-                duration: '10 min',
-                status: 'locked'
-              },
-              {
-                id: '15',
-                title: 'Promo Tools Quiz',
-                type: 'quiz',
-                questions: 8,
-                pass_rate: 75,
-                status: 'locked'
-              }
-            ],
-            progress: 0,
-            status: 'locked',
-            unlocks: 'Access to downloadable "Affiliate Success Toolkit"'
-          },
-          {
-            id: '3',
-            title: 'First Clicks Challenge',
-            description: 'Learn how to launch campaigns and get your first clicks',
-            xp_reward: 300,
-            badge: 'Click Master',
-            modules: [
-              {
-                id: '16',
-                title: 'Campaign Launch Guide',
-                type: 'video',
-                duration: '12 min',
-                status: 'locked'
-              },
-              {
-                id: '17',
-                title: 'Funnel Optimization Basics',
-                type: 'interactive',
-                duration: '15 min',
-                status: 'locked'
-              },
-              {
-                id: '18',
-                title: '10 Tracked Clicks Challenge',
+                title: 'Earn your first 1000 USD in trading volume',
                 type: 'task',
                 duration: 'varies',
-                status: 'locked'
-              },
-              {
-                id: '19',
-                title: 'Landing Experience Quiz',
-                type: 'quiz',
-                questions: 7,
-                pass_rate: 70,
-                status: 'locked'
+                status: 'locked',
+                xp_reward: 2500,
+                subModules: [
+                  { title: '03 Understanding your metrics', type: 'lesson' }
+                ]
               }
             ],
             progress: 0,
             status: 'locked',
-            unlocks: 'Leaderboard slot'
-          },
-          {
-            id: '4',
-            title: 'First Referral Mastery',
-            description: 'Learn best practices for conversions and compliance',
-            xp_reward: 400,
-            badge: 'Referral Master',
-            modules: [
-              {
-                id: '20',
-                title: 'Conversion Best Practices',
-                type: 'video',
-                duration: '15 min',
-                status: 'locked'
-              },
-              {
-                id: '21',
-                title: 'Compliance Reminders',
-                type: 'interactive',
-                duration: '10 min',
-                status: 'locked'
-              },
-              {
-                id: '22',
-                title: 'First Referral Challenge',
-                type: 'task',
-                duration: 'varies',
-                status: 'locked'
-              },
-              {
-                id: '23',
-                title: 'Conversion Optimization Quiz',
-                type: 'quiz',
-                questions: 10,
-                pass_rate: 80,
-                status: 'locked'
-              }
-            ],
-            progress: 0,
-            status: 'locked',
-            unlocks: 'Shortcut to Silver tier + VIP badge'
+            unlocks: 'PRO Partner Status + Exclusive Benefits'
           }
         ];
         
@@ -362,9 +286,9 @@ const Curriculum = () => {
       <Stack spacing={8}>
         {/* Header */}
         <Box>
-          <Heading mb={2}>Level-Up Curriculum</Heading>
+          <Heading mb={2}>Actions and XP</Heading>
           <Text color="gray.600">
-            Master the partner journey through these five levels to fast-track to Silver tier.
+            Complete these actions to earn XP and advance through partner levels.
           </Text>
         </Box>
         
@@ -389,19 +313,21 @@ const Curriculum = () => {
                     py={1} 
                     borderRadius="full" 
                     colorScheme={getStatusColor(level.status)}
-                    mr={3}
+                    mr={4}
+                    minW="140px"
+                    textAlign="center"
                   >
-                    Level {level.id}
+                    Level: {level.id.toUpperCase()}
                   </Badge>
                   
-                  <Box textAlign="left">
+                  <Box textAlign="left" flex="1">
                     <Heading size="md">{level.title}</Heading>
                     <Text color="gray.600" mt={1}>{level.description}</Text>
                   </Box>
                 </Flex>
                 
                 <Stack direction="row" align="center" spacing={4} mr={4}>
-                  <Flex align="center">
+                  <Flex align="center" minW="80px">
                     <Icon as={FiAward} color="accent.500" mr={1} />
                     <Text>{level.xp_reward} XP</Text>
                   </Flex>
@@ -414,7 +340,7 @@ const Curriculum = () => {
                     colorScheme={getStatusColor(level.status)}
                   />
                   
-                  <Badge colorScheme={getStatusColor(level.status)}>
+                  <Badge colorScheme={getStatusColor(level.status)} minW="50px" textAlign="center">
                     {level.progress}%
                   </Badge>
                 </Stack>
@@ -452,6 +378,35 @@ const Curriculum = () => {
                               {module.title}
                             </Text>
                             
+                            {module.specification && (
+                              <Text fontSize="sm" color="gray.600" mt={1}>
+                                Specification: {module.specification}
+                              </Text>
+                            )}
+                            
+                            {module.note && (
+                              <Text fontSize="sm" color="orange.600" mt={1} fontStyle="italic">
+                                {module.note}
+                              </Text>
+                            )}
+                            
+                            {/* Sub-modules list */}
+                            {module.subModules && module.subModules.length > 0 && (
+                              <Box mt={3} pl={4} borderLeft="2px" borderColor="gray.200">
+                                <Text fontSize="sm" fontWeight="medium" color="gray.700" mb={2}>
+                                  Lessons included:
+                                </Text>
+                                <List spacing={1}>
+                                  {module.subModules.map((subModule, index) => (
+                                    <ListItem key={index} fontSize="sm" color="gray.600">
+                                      <ListIcon as={FiBook} color="gray.400" />
+                                      {subModule.title}
+                                    </ListItem>
+                                  ))}
+                                </List>
+                              </Box>
+                            )}
+                            
                             <Flex mt={1} align="center" color="gray.500" gap={3}>
                               <Flex align="center">
                                 <Icon as={getModuleIcon(module.type)} boxSize={3} mr={1} />
@@ -462,6 +417,15 @@ const Curriculum = () => {
                                 <Flex align="center">
                                   <Icon as={FiClock} boxSize={3} mr={1} />
                                   <Text fontSize="sm">{module.duration}</Text>
+                                </Flex>
+                              )}
+                              
+                              {module.xp_reward && (
+                                <Flex align="center">
+                                  <Icon as={FiAward} boxSize={3} mr={1} color="accent.500" />
+                                  <Text fontSize="sm" fontWeight="medium" color="accent.500">
+                                    {module.xp_reward} XP
+                                  </Text>
                                 </Flex>
                               )}
                               

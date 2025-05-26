@@ -40,11 +40,10 @@ import axios from 'axios';
 import config from '../config';
 
 // Components
-import ModuleCard from '../components/ModuleCard';
+import XPProgressBar from '../components/XPProgressBar';
 
 const Dashboard = () => {
   const { user } = useAuth();
-  const [modules, setModules] = useState([]);
   const [leaderboard, setLeaderboard] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   
@@ -52,16 +51,11 @@ const Dashboard = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [showWelcomeModal, setShowWelcomeModal] = useState(false);
 
-  // Fetch modules and leaderboard data
+  // Fetch leaderboard data
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [modulesRes, leaderboardRes] = await Promise.all([
-          axios.get(`${config.apiUrl}/modules`),
-          axios.get(`${config.apiUrl}/leaderboard`)
-        ]);
-
-        setModules(modulesRes.data);
+        const leaderboardRes = await axios.get(`${config.apiUrl}/leaderboard`);
         setLeaderboard(leaderboardRes.data);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -81,44 +75,9 @@ const Dashboard = () => {
     }
   }, [onOpen]);
 
-  // Calculate progress
-  const totalModules = modules.length;
-  const completedModules = user?.modules_completed?.length || 0;
-  const progressPercent = totalModules > 0 ? (completedModules / totalModules) * 100 : 0;
-
-  // Get current module
-  const currentModuleId = user?.current_module || '1';
-  const currentModule = modules.find(m => m.id === currentModuleId);
-
-  // Get next lesson/quiz
+  // Get next activity text
   const getNextActivityText = () => {
-    if (!currentModule) return 'Start your journey';
-    
-    const moduleProgress = user?.progress?.[currentModuleId] || {};
-    
-    // Check for incomplete lessons
-    for (const lesson of currentModule.lessons) {
-      const lessonCompleted = moduleProgress?.lessons?.[lesson.id]?.completed;
-      if (!lessonCompleted) {
-        return `Continue with "${lesson.title}"`;
-      }
-    }
-    
-    // Check for incomplete quizzes
-    for (const quiz of currentModule.quizzes) {
-      const quizCompleted = moduleProgress?.quizzes?.[quiz.id]?.completed;
-      if (!quizCompleted) {
-        return `Take the "${quiz.title}"`;
-      }
-    }
-    
-    // If all completed in current module, suggest moving to next
-    const nextModuleId = String(Number(currentModuleId) + 1);
-    const nextModule = modules.find(m => m.id === nextModuleId);
-    
-    return nextModule 
-      ? `Start next module: "${nextModule.title}"`
-      : 'All modules completed!';
+    return 'Continue your Level-Up Journey to earn more XP and unlock new opportunities!';
   };
 
   // Card background colors
@@ -154,9 +113,9 @@ const Dashboard = () => {
         <ModalBody pt={6} pb={4}>
           <Stack spacing={6}>
             <Box>
-              <Heading size="md" mb={2}>Fast-Track Your Partnership Journey</Heading>
+              <Heading size="md" mb={2}>Welcome to Your Partnership Journey</Heading>
               <Text>
-                Welcome to our gamified partner onboarding experience. The Level-Up programme helps you master everything you need to become a successful partner and fast-track to Silver tier.
+                Welcome to our gamified partner onboarding experience. The Level-Up programme helps you master everything you need to become a successful partner.
               </Text>
             </Box>
             
@@ -166,10 +125,10 @@ const Dashboard = () => {
                   <Stack spacing={4}>
                     <Flex align="center">
                       <Icon as={FiStar} color="yellow.400" boxSize={5} mr={2} />
-                      <Text fontWeight="bold">Silver Tier Shortcut</Text>
+                      <Text fontWeight="bold">Earn XP & Level Up</Text>
                     </Flex>
                     <Text fontSize="sm">
-                      Complete all 5 levels to bypass the regular requirements and instantly qualify for Silver tier benefits.
+                      Progress through levels by earning experience points. Reach milestones at 500, 1000, 1500, and 3000 XP.
                     </Text>
                   </Stack>
                 </CardBody>
@@ -259,51 +218,13 @@ const Dashboard = () => {
           </Text>
         </Box>
 
-        {/* Progress overview */}
+        {/* XP Progress */}
         <Card bg={cardBg} boxShadow="md" borderRadius="lg">
-          <CardHeader pb={0}>
-            <Heading size="md">Your Academy Progress</Heading>
+          <CardHeader>
+            <Heading size="md">Your Progress</Heading>
           </CardHeader>
           <CardBody>
-            <Stack spacing={4}>
-              <Flex align="center" justify="space-between">
-                <Text>
-                  {completedModules} of {totalModules} modules completed
-                </Text>
-                <Badge colorScheme="green" p={1} borderRadius="md">
-                  {user?.level || 'Novice'}
-                </Badge>
-              </Flex>
-              
-              <Progress 
-                value={progressPercent} 
-                size="md" 
-                colorScheme="brand" 
-                borderRadius="full"
-                hasStripe
-              />
-              
-              <Flex wrap="wrap" gap={3}>
-                {user?.badges?.map((badge, i) => (
-                  <Badge 
-                    key={i} 
-                    colorScheme="accent" 
-                    p={2} 
-                    borderRadius="md"
-                    display="flex"
-                    alignItems="center"
-                  >
-                    <Icon as={FiAward} mr={1} />
-                    {badge}
-                  </Badge>
-                ))}
-                {(!user?.badges || user.badges.length === 0) && (
-                  <Text fontSize="sm" color="gray.500">
-                    Complete modules to earn badges
-                  </Text>
-                )}
-              </Flex>
-            </Stack>
+            <XPProgressBar currentXP={user?.xp || 750} showLabels={true} />
           </CardBody>
         </Card>
 
@@ -327,10 +248,10 @@ const Dashboard = () => {
               <Stat>
                 <StatLabel display="flex" alignItems="center">
                   <Icon as={FiCheckCircle} mr={2} color="green.500" />
-                  Modules Completed
+                  Actions Completed
                 </StatLabel>
-                <StatNumber fontSize="3xl">{completedModules}</StatNumber>
-                <StatHelpText>Out of {totalModules} total modules</StatHelpText>
+                <StatNumber fontSize="3xl">{user?.actions_completed?.length || 2}</StatNumber>
+                <StatHelpText>Keep completing actions to earn more XP</StatHelpText>
               </Stat>
             </CardBody>
           </Card>
@@ -351,44 +272,6 @@ const Dashboard = () => {
           </Card>
         </SimpleGrid>
 
-        {/* Fast-Track to Silver */}
-        <Card bg={cardBg} boxShadow="md" borderRadius="lg">
-          <CardHeader>
-            <Heading size="md">Fast-Track to Silver Tier</Heading>
-          </CardHeader>
-          <CardBody>
-            <Stack spacing={4}>
-              <Text>
-                Complete all 5 levels of the Level-Up programme to instantly qualify for Silver tier benefits.
-              </Text>
-
-              <Progress 
-                value={40} 
-                size="md" 
-                colorScheme="yellow" 
-                borderRadius="full"
-                hasStripe
-              />
-              
-              <Flex justify="space-between" color="gray.600">
-                <Text>Level 2/5 completed</Text>
-                <Text>3 more to go</Text>
-              </Flex>
-              
-              <Button
-                as={RouterLink}
-                to="/curriculum"
-                rightIcon={<FiChevronRight />}
-                colorScheme="yellow"
-                variant="outline"
-                size="md"
-              >
-                View Level-Up Journey
-              </Button>
-            </Stack>
-          </CardBody>
-        </Card>
-
         {/* Continue learning section */}
         <Card bg={cardBg} boxShadow="md" borderRadius="lg">
           <CardHeader>
@@ -398,17 +281,14 @@ const Dashboard = () => {
             <Stack spacing={4}>
               <Text>{getNextActivityText()}</Text>
               
-              {currentModule && (
-                <Button
-                  as={RouterLink}
-                  to={`/modules/${currentModuleId}`}
-                  rightIcon={<FiChevronRight />}
-                  colorScheme="brand"
-                  size="lg"
-                >
-                  Continue Module {currentModuleId}
-                </Button>
-              )}
+              <Button
+                as={RouterLink}
+                to="/curriculum"
+                colorScheme="brand"
+                size="lg"
+              >
+                Continue Level-Up Journey
+              </Button>
             </Stack>
           </CardBody>
         </Card>
@@ -423,17 +303,6 @@ const Dashboard = () => {
               <Stack spacing={3}>
                 <Button 
                   as={RouterLink} 
-                  to="/modules" 
-                  leftIcon={<FiBook />} 
-                  colorScheme="brand" 
-                  variant="outline"
-                  justifyContent="flex-start"
-                >
-                  View All Modules
-                </Button>
-                
-                <Button 
-                  as={RouterLink} 
                   to="/curriculum" 
                   leftIcon={<FiLayers />} 
                   colorScheme="brand" 
@@ -446,12 +315,23 @@ const Dashboard = () => {
                 <Button 
                   as={RouterLink} 
                   to="/gamification" 
+                  leftIcon={<FiTrendingUp />} 
+                  colorScheme="brand" 
+                  variant="outline"
+                  justifyContent="flex-start"
+                >
+                  XP Progress
+                </Button>
+                
+                <Button 
+                  as={RouterLink} 
+                  to="/rewards" 
                   leftIcon={<FiAward />} 
                   colorScheme="brand" 
                   variant="outline"
                   justifyContent="flex-start"
                 >
-                  Rewards & XP
+                  Rewards
                 </Button>
                 
                 <Button 

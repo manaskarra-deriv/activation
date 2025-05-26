@@ -36,11 +36,6 @@ const Profile = () => {
     email: user?.email || '',
   });
   
-  // Calculate progress
-  const progressPercent = user?.modules_completed?.length 
-    ? (user.modules_completed.length / 5) * 100 
-    : 0;
-  
   // Handle form change
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -124,23 +119,6 @@ const Profile = () => {
                 <Text color="gray.600" mb={4}>
                   {user?.email || 'user@example.com'}
                 </Text>
-                
-                <Stack>
-                  <Text fontWeight="medium">Overall Progress</Text>
-                  <Progress 
-                    value={progressPercent} 
-                    size="sm" 
-                    colorScheme="brand" 
-                    borderRadius="full"
-                    mb={1}
-                  />
-                  <Flex justify="space-between">
-                    <Text fontSize="sm">
-                      {user?.modules_completed?.length || 0}/5 modules
-                    </Text>
-                    <Text fontSize="sm">{progressPercent.toFixed(0)}% complete</Text>
-                  </Flex>
-                </Stack>
               </Box>
               
               {!isEditing && (
@@ -269,43 +247,6 @@ const Profile = () => {
                 </Stack>
               </Box>
             </Stack>
-          </CardBody>
-        </Card>
-        
-        {/* Badges */}
-        <Card bg={cardBg} boxShadow="md" borderRadius="lg">
-          <CardHeader>
-            <Heading size="md">Your Badges</Heading>
-          </CardHeader>
-          <CardBody>
-            <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={4}>
-              {user?.badges?.map((badge, index) => (
-                <Flex 
-                  key={index} 
-                  p={4} 
-                  border="1px" 
-                  borderColor="gray.200" 
-                  borderRadius="md"
-                  align="center"
-                >
-                  <Icon as={FiAward} boxSize={8} color="accent.500" mr={3} />
-                  <Box>
-                    <Text fontWeight="bold">{badge}</Text>
-                    <Text fontSize="sm" color="gray.600">
-                      Earned from completing a module
-                    </Text>
-                  </Box>
-                </Flex>
-              ))}
-              
-              {(!user?.badges || user.badges.length === 0) && (
-                <Box p={4} border="1px" borderColor="gray.200" borderRadius="md">
-                  <Text color="gray.500">
-                    Complete modules to earn badges. They will appear here.
-                  </Text>
-                </Box>
-              )}
-            </SimpleGrid>
           </CardBody>
         </Card>
       </Stack>

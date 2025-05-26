@@ -48,7 +48,6 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 const Gamification = () => {
   const { user } = useAuth();
   const [leaderboard, setLeaderboard] = useState([]);
-  const [badges, setBadges] = useState([]);
   const [xpHistory, setXpHistory] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   
@@ -82,64 +81,6 @@ const Gamification = () => {
           { date: 'Feb 20', xp: 750 },
         ];
         
-        // Badges (both earned and locked)
-        const mockBadges = [
-          {
-            id: '1',
-            name: 'Orientation Complete',
-            description: 'Completed the Partner Hub orientation',
-            category: 'achievement',
-            status: 'earned',
-            date_earned: 'Jan 5, 2023',
-            icon: FiCheck
-          },
-          {
-            id: '2',
-            name: 'Product Expert',
-            description: 'Mastered the knowledge of Deriv products',
-            category: 'achievement',
-            status: 'earned',
-            date_earned: 'Jan 18, 2023',
-            icon: FiStar
-          },
-          {
-            id: '3',
-            name: 'Promo Tools Master',
-            description: 'Learned how to use all promotional tools',
-            category: 'achievement',
-            status: 'locked',
-            unlock_requirement: 'Complete Level 2',
-            icon: FiAward
-          },
-          {
-            id: '4',
-            name: 'Click Master',
-            description: 'Generated your first 10 tracked clicks',
-            category: 'milestone',
-            status: 'locked',
-            unlock_requirement: 'Complete Level 3',
-            icon: FiBarChart2
-          },
-          {
-            id: '5',
-            name: 'Referral Master',
-            description: 'Successfully referred your first client',
-            category: 'milestone',
-            status: 'locked',
-            unlock_requirement: 'Complete Level 4',
-            icon: FiUsers
-          },
-          {
-            id: '6',
-            name: 'Silver Tier',
-            description: 'Fast-tracked to Silver partner tier',
-            category: 'tier',
-            status: 'locked',
-            unlock_requirement: 'Complete all 5 levels',
-            icon: FiAward
-          }
-        ];
-        
         // Leaderboard
         const mockLeaderboard = [
           { rank: 1, username: 'TopPartner123', xp: 1250, region: 'Asia', join_date: 'Dec 2022', profile_img: null },
@@ -155,7 +96,6 @@ const Gamification = () => {
         ];
         
         setLeaderboard(mockLeaderboard);
-        setBadges(mockBadges);
         setXpHistory(mockXpHistory);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -206,9 +146,9 @@ const Gamification = () => {
       <Stack spacing={6}>
         {/* Header */}
         <Box>
-          <Heading mb={2}>Gamification & Rewards</Heading>
+          <Heading mb={2}>XP Progress & Leaderboard</Heading>
           <Text color="gray.600">
-            Track your progress, earn badges, and compete on the leaderboard
+            Track your XP progress and compete on the leaderboard
           </Text>
         </Box>
         
@@ -221,7 +161,6 @@ const Gamification = () => {
         >
           <TabList>
             <Tab><Icon as={FiTrendingUp} mr={2} /> XP Progress</Tab>
-            <Tab><Icon as={FiAward} mr={2} /> Badges</Tab>
             <Tab><Icon as={FiBarChart2} mr={2} /> Leaderboard</Tab>
           </TabList>
           
@@ -302,146 +241,6 @@ const Gamification = () => {
                           </LineChart>
                         </ResponsiveContainer>
                       </Box>
-                    </Stack>
-                  </CardBody>
-                </Card>
-                
-                {/* Achievements */}
-                <Card boxShadow="md" bg={cardBg} borderRadius="lg">
-                  <CardBody>
-                    <Stack spacing={4}>
-                      <Heading size="md">Recent Achievements</Heading>
-                      
-                      <Stack>
-                        {badges
-                          .filter(badge => badge.status === 'earned')
-                          .map(badge => (
-                            <Flex 
-                              key={badge.id}
-                              justify="space-between" 
-                              align="center"
-                              p={3}
-                              borderWidth="1px"
-                              borderColor={borderColor}
-                              borderRadius="md"
-                            >
-                              <Flex align="center">
-                                <Icon as={badge.icon} boxSize={6} color="accent.500" mr={3} />
-                                <Box>
-                                  <Text fontWeight="medium">{badge.name}</Text>
-                                  <Text fontSize="sm" color="gray.600">{badge.description}</Text>
-                                </Box>
-                              </Flex>
-                              
-                              <Flex direction="column" align="flex-end">
-                                <Badge colorScheme="green" mb={1}>+50 XP</Badge>
-                                <Text fontSize="sm" color="gray.500">{badge.date_earned}</Text>
-                              </Flex>
-                            </Flex>
-                          ))}
-                      </Stack>
-                    </Stack>
-                  </CardBody>
-                </Card>
-              </Stack>
-            </TabPanel>
-            
-            {/* Badges */}
-            <TabPanel>
-              <Stack spacing={6}>
-                {/* Badge stats */}
-                <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6}>
-                  <Card boxShadow="md" bg={cardBg} borderRadius="lg">
-                    <CardBody>
-                      <Stack>
-                        <Text fontWeight="medium" color="gray.600">Total Badges</Text>
-                        <Heading size="xl">{badges.filter(b => b.status === 'earned').length}/{badges.length}</Heading>
-                        <Text color="gray.500">
-                          {Math.round((badges.filter(b => b.status === 'earned').length / badges.length) * 100)}% complete
-                        </Text>
-                      </Stack>
-                    </CardBody>
-                  </Card>
-                  
-                  <Card boxShadow="md" bg={cardBg} borderRadius="lg">
-                    <CardBody>
-                      <Stack>
-                        <Text fontWeight="medium" color="gray.600">Latest Badge</Text>
-                        <Heading size="md">
-                          {badges.find(b => b.status === 'earned')?.name || 'None yet'}
-                        </Heading>
-                        <Text color="gray.500">
-                          Earned on {badges.find(b => b.status === 'earned')?.date_earned || '-'}
-                        </Text>
-                      </Stack>
-                    </CardBody>
-                  </Card>
-                  
-                  <Card boxShadow="md" bg={cardBg} borderRadius="lg">
-                    <CardBody>
-                      <Stack>
-                        <Text fontWeight="medium" color="gray.600">Next Badge</Text>
-                        <Heading size="md">
-                          {badges.find(b => b.status === 'locked')?.name || 'All badges earned!'}
-                        </Heading>
-                        <Text color="gray.500">
-                          {badges.find(b => b.status === 'locked')?.unlock_requirement || 'Congratulations!'}
-                        </Text>
-                      </Stack>
-                    </CardBody>
-                  </Card>
-                </SimpleGrid>
-                
-                {/* Badge Grid */}
-                <Card boxShadow="md" bg={cardBg} borderRadius="lg">
-                  <CardBody>
-                    <Stack spacing={4}>
-                      <Heading size="md">All Badges</Heading>
-                      
-                      <SimpleGrid columns={{ base: 1, sm: 2, md: 3 }} spacing={4}>
-                        {badges.map(badge => (
-                          <Card 
-                            key={badge.id} 
-                            variant="outline" 
-                            borderRadius="md" 
-                            borderWidth="1px"
-                            borderColor={borderColor}
-                            opacity={badge.status === 'locked' ? 0.7 : 1}
-                          >
-                            <CardBody>
-                              <Stack spacing={4} align="center" textAlign="center">
-                                <Flex 
-                                  justifyContent="center" 
-                                  alignItems="center" 
-                                  bg={badge.status === 'locked' ? 'gray.100' : 'accent.50'} 
-                                  w="70px" 
-                                  h="70px" 
-                                  borderRadius="full"
-                                >
-                                  <Icon 
-                                    as={badge.status === 'locked' ? FiLock : badge.icon} 
-                                    boxSize={8} 
-                                    color={badge.status === 'locked' ? 'gray.400' : 'accent.500'} 
-                                  />
-                                </Flex>
-                                
-                                <Box>
-                                  <Text fontWeight="bold">{badge.name}</Text>
-                                  <Text fontSize="sm" color="gray.600">{badge.description}</Text>
-                                </Box>
-                                
-                                {badge.status === 'earned' ? (
-                                  <Badge colorScheme="green">Earned</Badge>
-                                ) : (
-                                  <Text fontSize="xs" color="gray.500">
-                                    {badge.unlock_requirement}
-                                  </Text>
-                                )}
-                              </Stack>
-                            </CardBody>
-                          </Card>
-                        ))}
-                      </SimpleGrid>
                     </Stack>
                   </CardBody>
                 </Card>

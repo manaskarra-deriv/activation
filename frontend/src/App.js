@@ -12,10 +12,14 @@ import Leaderboard from './pages/Leaderboard';
 import Profile from './pages/Profile';
 import Curriculum from './pages/Curriculum';
 import Gamification from './pages/Gamification';
+import Rewards from './pages/Rewards';
+import FAQs from './pages/FAQs';
+import AdminDashboard from './pages/AdminDashboard';
 
 // Components
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
+import AIAssistant from './components/AIAssistant';
 
 // Context
 import { AuthProvider, useAuth } from './context/AuthContext';
@@ -106,10 +110,16 @@ function AppContent() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/curriculum" element={<Curriculum />} />
             <Route path="/gamification" element={<Gamification />} />
+            <Route path="/rewards" element={<Rewards />} />
+            <Route path="/faqs" element={<FAQs />} />
+            <Route path="/admin" element={<AdminDashboard />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </Box>
       </Box>
+      
+      {/* AI Assistant - Available on all pages */}
+      <AIAssistant />
     </Box>
   );
 }
