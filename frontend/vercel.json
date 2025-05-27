@@ -1,4 +1,5 @@
 {
+  "_comment": "Deployment triggered on 2025-05-27 09:55 - AI Assistant fix",
   "rewrites": [
     {
       "source": "/(.*)",
