@@ -36,17 +36,17 @@ const FAQs = () => {
         {
           id: 'getting-started-1',
           question: 'How do I start my partner journey?',
-          answer: 'Welcome to the Partner Activation Academy! Start by completing your Level-Up Journey. Begin with the Mandatory Level actions like completing KYC and setting up your payment method. These foundational steps will prepare you for earning XP and advancing through the program.'
+          answer: 'Welcome to the Partner Activation Academy! Start by completing your Level-Up Journey. Begin with the BASIC Level actions like completing KYC and setting up your payment method. These foundational steps will prepare you for earning tokens and advancing through the program.'
         },
         {
           id: 'getting-started-2',
           question: 'What is the Level-Up Journey?',
-          answer: 'The Level-Up Journey is our structured curriculum designed to help you become a successful partner. It consists of four levels: Mandatory (account setup), Medium (client acquisition), High (commission goals), and PRO (advanced targets). Each level contains specific actions that earn you XP when completed.'
+          answer: 'The Level-Up Journey is our structured curriculum designed to help you become a successful partner. It consists of four levels: BASIC (account setup - mandatory, no tokens), MEDIUM (client acquisition - 500 tokens each), HIGH (commission goals - 1000 tokens each), and PRO (advanced targets - 2500 tokens each). Each level contains specific actions that earn you tokens when completed.'
         },
         {
           id: 'getting-started-3',
           question: 'How long does it take to complete the program?',
-          answer: 'The timeline varies based on your dedication and business development pace. The Mandatory level can be completed in a few days, while advancing through Medium, High, and PRO levels depends on your success in bringing clients and generating commissions. Most active partners see significant progress within 3-6 months.'
+          answer: 'The timeline varies based on your dedication and business development pace. The BASIC level can be completed in a few days, while advancing through MEDIUM, HIGH, and PRO levels depends on your success in bringing clients and generating commissions. Most active partners see significant progress within 3-6 months.'
         }
       ]
     },
@@ -57,23 +57,23 @@ const FAQs = () => {
       faqs: [
         {
           id: 'xp-rewards-1',
-          question: 'How do I earn XP?',
-          answer: 'You earn XP by completing actions in your Level-Up Journey. Medium level actions (bringing clients/sub-affiliates) earn 500 XP each, High level actions (commissions/trading volume) earn 600 XP each, and PRO level actions earn 2500 XP each. Mandatory actions don\'t grant XP but are required to unlock other levels.'
+          question: 'How do I earn tokens?',
+          answer: 'You earn tokens by completing actions in your Level-Up Journey. MEDIUM level actions (bringing clients/sub-affiliates) earn 500 tokens each, HIGH level actions (commissions/trading volume) earn 1000 tokens each, and PRO level actions earn 2500 tokens each. BASIC level actions are mandatory but don\'t grant tokens - they unlock other levels.'
         },
         {
           id: 'xp-rewards-2',
-          question: 'What are the XP milestones?',
-          answer: 'There are four key XP milestones: 500 XP, 1000 XP, 1500 XP, and 3000 XP. Reaching these milestones unlocks new opportunities and recognition within the partner program. Your progress is tracked on your dashboard and throughout the platform.'
+          question: 'What are the token milestones?',
+          answer: 'There are key token milestones that unlock new opportunities and recognition within the partner program. Your progress is tracked on your dashboard and throughout the platform. The more tokens you earn, the higher your ranking and rewards potential.'
         },
         {
           id: 'xp-rewards-3',
           question: 'How do I redeem rewards?',
-          answer: 'Once you\'ve accumulated enough XP, you can redeem them for various rewards including Amazon gift cards, Spotify Premium, Canva Pro, Netflix subscriptions, and more. Contact your partner manager to process your reward redemption. We recommend saving up for higher-value tiers to maximize your rewards.'
+          answer: 'Once you\'ve accumulated enough tokens, you can redeem them for various rewards including Amazon gift cards, Spotify Premium, Canva Pro, Netflix subscriptions, and more. Contact your partner manager to process your reward redemption. We recommend saving up for higher-value tiers to maximize your rewards.'
         },
         {
           id: 'xp-rewards-4',
           question: 'What reward tiers are available?',
-          answer: 'We offer five reward tiers: $30, $50, $70, $85, and $100 in prizes. Each tier includes various options like gift cards, software subscriptions, course vouchers, and coaching sessions. Higher tiers offer better value and more premium rewards.'
+          answer: 'We offer four reward tiers: $30, $50, $70, and $100 in prizes. Each tier includes various options like gift cards, software subscriptions, course vouchers, and coaching sessions. Higher tiers offer better value and more premium rewards.'
         }
       ]
     },
@@ -90,7 +90,7 @@ const FAQs = () => {
         {
           id: 'activities-2',
           question: 'What counts as a sub-affiliate?',
-          answer: 'A sub-affiliate is someone you recruit who becomes a partner under your referral. They should be actively engaged in promoting our products and services. When you successfully bring 5 sub-affiliates, you\'ll earn 500 XP and advance in the Medium level of your journey.'
+          answer: 'A sub-affiliate is someone you recruit who becomes a partner under your referral. They should be actively engaged in promoting our products and services. When you successfully bring 5 sub-affiliates, you\'ll earn 500 tokens and advance in the MEDIUM level of your journey.'
         },
         {
           id: 'activities-3',
@@ -122,7 +122,7 @@ const FAQs = () => {
         {
           id: 'technical-3',
           question: 'Can I track my progress in real-time?',
-          answer: 'Yes! Your dashboard provides real-time updates on your XP, completed actions, leaderboard ranking, and overall progress. The XP progress bar shows your current position and next milestones. All your achievements and statistics are updated automatically.'
+          answer: 'Yes! Your dashboard provides real-time updates on your tokens, completed actions, leaderboard ranking, and overall progress. The progress bar shows your current position and next milestones. All your achievements and statistics are updated automatically.'
         },
         {
           id: 'technical-4',

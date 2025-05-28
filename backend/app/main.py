@@ -26,15 +26,18 @@ else:
     allowed_origins = [
         FRONTEND_URL,
         "https://activation-livid.vercel.app",
-        "http://localhost:3000"
+        "https://partneractivation.vercel.app",
+        "http://localhost:3000",
+        "http://127.0.0.1:3000"
     ]
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=allowed_origins,
-    allow_credentials=False if ENVIRONMENT == "production" else True,
-    allow_methods=["*"],
+    allow_credentials=False,  # Set to False for production with wildcard origins
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
+    expose_headers=["*"]
 )
 
 # Mock database (replace with actual database in production)
@@ -180,7 +183,30 @@ class ChatRequest(BaseModel):
 # Routes
 @app.get("/")
 def read_root():
-    return {"message": "Welcome to Partner Activation Academy API"}
+    return {
+        "message": "Welcome to Partner Activation Academy API",
+        "status": "healthy",
+        "environment": ENVIRONMENT,
+        "version": "1.0.0",
+        "endpoints": {
+            "health": "/health",
+            "modules": "/modules",
+            "leaderboard": "/leaderboard",
+            "ai_chat": "/ai/chat"
+        }
+    }
+
+@app.get("/health")
+def health_check():
+    """Health check endpoint for monitoring"""
+    api_key_configured = bool(os.getenv("OPENAI_API_KEY"))
+    return {
+        "status": "healthy",
+        "timestamp": datetime.now().isoformat(),
+        "environment": ENVIRONMENT,
+        "ai_service_configured": api_key_configured,
+        "cors_origins": "all" if ENVIRONMENT == "production" else "restricted"
+    }
 
 @app.get("/modules", response_model=List[Module])
 def get_modules():
@@ -289,8 +315,12 @@ async def ai_chat(chat_request: ChatRequest):
         api_base_url = os.getenv("API_BASE_URL", "https://litellm.deriv.ai/v1")
         model_name = os.getenv("OPENAI_MODEL_NAME", "gpt-4.1-mini")
         
+        # If no API key is configured, return a helpful fallback response
         if not api_key:
-            raise HTTPException(status_code=500, detail="OpenAI API key not configured")
+            return {
+                "message": "I'm currently unable to access the AI service. However, I can still help you with Partner Academy questions! Please check the FAQs section or contact your partner manager for immediate assistance.",
+                "usage": {"fallback": True}
+            }
         
         # Prepare the request payload
         payload = {
@@ -301,28 +331,34 @@ async def ai_chat(chat_request: ChatRequest):
             "stream": False
         }
         
-        # Make the API call
-        async with httpx.AsyncClient() as client:
+        # Make the API call with timeout
+        async with httpx.AsyncClient(timeout=30.0) as client:
             response = await client.post(
                 f"{api_base_url}/chat/completions",
                 headers={
                     "Content-Type": "application/json",
                     "Authorization": f"Bearer {api_key}"
                 },
-                json=payload,
-                timeout=30.0
+                json=payload
             )
             
             if response.status_code != 200:
-                raise HTTPException(
-                    status_code=response.status_code, 
-                    detail=f"OpenAI API error: {response.text}"
-                )
+                # Log the error for debugging
+                print(f"OpenAI API error: {response.status_code} - {response.text}")
+                
+                # Return a helpful fallback response
+                return {
+                    "message": "I'm experiencing some technical difficulties right now. For immediate help with Partner Academy questions, please check the FAQs section or contact your partner manager.",
+                    "usage": {"fallback": True, "error": f"API returned {response.status_code}"}
+                }
             
             result = response.json()
             
             if "choices" not in result or not result["choices"]:
-                raise HTTPException(status_code=500, detail="Invalid response from OpenAI API")
+                return {
+                    "message": "I'm having trouble processing your request right now. Please try asking your question again, or contact your partner manager for immediate assistance.",
+                    "usage": {"fallback": True, "error": "Invalid API response"}
+                }
             
             return {
                 "message": result["choices"][0]["message"]["content"],
@@ -330,10 +366,22 @@ async def ai_chat(chat_request: ChatRequest):
             }
             
     except httpx.TimeoutException:
-        raise HTTPException(status_code=504, detail="Request timeout - AI service took too long to respond")
+        print("AI API request timed out")
+        return {
+            "message": "The AI service is taking longer than usual to respond. For immediate assistance with Partner Academy questions, please check the FAQs section or contact your partner manager.",
+            "usage": {"fallback": True, "error": "timeout"}
+        }
     except httpx.RequestError as e:
-        raise HTTPException(status_code=500, detail=f"Request error: {str(e)}")
+        print(f"Request error: {str(e)}")
+        return {
+            "message": "I'm currently unable to connect to the AI service. However, I can still help! Please check the FAQs section for common questions or contact your partner manager for immediate assistance.",
+            "usage": {"fallback": True, "error": "connection_error"}
+        }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Unexpected error: {str(e)}")
+        print(f"Unexpected error in AI chat: {str(e)}")
+        return {
+            "message": "I encountered an unexpected error. For reliable assistance with Partner Academy questions, please check the FAQs section or contact your partner manager.",
+            "usage": {"fallback": True, "error": "unexpected_error"}
+        }
 
 # Run with: uvicorn app.main:app --reload 

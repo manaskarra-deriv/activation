@@ -68,17 +68,17 @@ const Gamification = () => {
         setIsLoading(true);
         
         // Mock data for demo
-        // XP history (for chart)
+        // Token history (for chart)
         const mockXpHistory = [
           { date: 'Jan 1', xp: 0 },
           { date: 'Jan 5', xp: 100 },
           { date: 'Jan 12', xp: 250 },
           { date: 'Jan 18', xp: 350 },
-          { date: 'Jan 25', xp: 350 },
-          { date: 'Feb 2', xp: 450 },
-          { date: 'Feb 10', xp: 600 },
-          { date: 'Feb 15', xp: 600 },
-          { date: 'Feb 20', xp: 750 },
+          { date: 'Jan 25', xp: 500 },
+          { date: 'Feb 2', xp: 750 },
+          { date: 'Feb 10', xp: 1000 },
+          { date: 'Feb 15', xp: 1100 },
+          { date: 'Feb 20', xp: 1250 },
         ];
         
         // Leaderboard
@@ -91,7 +91,7 @@ const Gamification = () => {
           { rank: 6, username: 'TradingExpert', xp: 820, region: 'Europe', join_date: 'Jan 2023', profile_img: null },
           { rank: 7, username: 'CryptoKing', xp: 780, region: 'Americas', join_date: 'Nov 2022', profile_img: null },
           { rank: 8, username: 'ForexChamp', xp: 750, region: 'Africa', join_date: 'Dec 2022', profile_img: null },
-          { rank: 9, username: user?.username || 'CurrentUser', xp: 750, region: 'Asia', join_date: 'Jan 2023', profile_img: null, is_current_user: true },
+          { rank: 9, username: user?.username || 'CurrentUser', xp: 1250, region: 'Asia', join_date: 'Jan 2023', profile_img: null, is_current_user: true },
           { rank: 10, username: 'OptionsPro', xp: 720, region: 'Europe', join_date: 'Feb 2023', profile_img: null },
         ];
         
@@ -106,6 +106,37 @@ const Gamification = () => {
     
     fetchData();
   }, [user]);
+  
+  // Calculate next reward milestone
+  const getNextRewardMilestone = (currentTokens) => {
+    const rewardTiers = [
+      { amount: 30, label: '$30 Reward Tier', tokensRequired: 1500 },
+      { amount: 50, label: '$50 Reward Tier', tokensRequired: 2500 },
+      { amount: 70, label: '$70 Reward Tier', tokensRequired: 4000 },
+      { amount: 100, label: '$100 Reward Tier', tokensRequired: 6000 }
+    ];
+    
+    // Find the next tier the user hasn't reached yet
+    const nextTier = rewardTiers.find(tier => currentTokens < tier.tokensRequired);
+    
+    if (nextTier) {
+      const progress = (currentTokens / nextTier.tokensRequired) * 100;
+      return {
+        label: nextTier.label,
+        current: currentTokens,
+        required: nextTier.tokensRequired,
+        progress: Math.min(progress, 100)
+      };
+    }
+    
+    // If user has reached all tiers, show the highest tier as completed
+    return {
+      label: '$100 Reward Tier',
+      current: currentTokens,
+      required: 6000,
+      progress: 100
+    };
+  };
   
   // Filter leaderboard data
   const getFilteredLeaderboard = () => {
@@ -146,9 +177,9 @@ const Gamification = () => {
       <Stack spacing={6}>
         {/* Header */}
         <Box>
-          <Heading mb={2}>XP Progress & Leaderboard</Heading>
+          <Heading mb={2}>Token Progress & Leaderboard</Heading>
           <Text color="gray.600">
-            Track your XP progress and compete on the leaderboard
+            Track your token progress and compete on the leaderboard
           </Text>
         </Box>
         
@@ -160,7 +191,7 @@ const Gamification = () => {
           index={tabIndex}
         >
           <TabList>
-            <Tab><Icon as={FiTrendingUp} mr={2} /> XP Progress</Tab>
+            <Tab><Icon as={FiTrendingUp} mr={2} /> Token Progress</Tab>
             <Tab><Icon as={FiBarChart2} mr={2} /> Leaderboard</Tab>
           </TabList>
           
@@ -168,12 +199,12 @@ const Gamification = () => {
             {/* XP Progress */}
             <TabPanel>
               <Stack spacing={6}>
-                {/* XP Summary */}
+                {/* Token Summary */}
                 <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6}>
                   <Card boxShadow="md" bg={cardBg} borderRadius="lg">
                     <CardBody>
                       <Stack>
-                        <Text fontWeight="medium" color="gray.600">Total XP</Text>
+                        <Text fontWeight="medium" color="gray.600">Total Tokens</Text>
                         <Heading size="xl">{xpHistory[xpHistory.length - 1]?.xp || 0}</Heading>
                         <Flex align="center" color="green.500">
                           <Icon as={FiTrendingUp} mr={1} />
@@ -201,27 +232,27 @@ const Gamification = () => {
                     <CardBody>
                       <Stack>
                         <Text fontWeight="medium" color="gray.600">Next Milestone</Text>
-                        <Heading size="md">Silver Tier Badge</Heading>
+                        <Heading size="md">{getNextRewardMilestone(xpHistory[xpHistory.length - 1]?.xp || 0).label}</Heading>
                         <Progress 
-                          value={70} 
+                          value={getNextRewardMilestone(xpHistory[xpHistory.length - 1]?.xp || 0).progress} 
                           size="sm" 
                           colorScheme="brand"
                           borderRadius="full"
                           mt={2}
                         />
                         <Text color="gray.500">
-                          {750}/1000 XP required
+                          {getNextRewardMilestone(xpHistory[xpHistory.length - 1]?.xp || 0).current}/{getNextRewardMilestone(xpHistory[xpHistory.length - 1]?.xp || 0).required} tokens required
                         </Text>
                       </Stack>
                     </CardBody>
                   </Card>
                 </SimpleGrid>
                 
-                {/* XP Chart */}
+                {/* Token Chart */}
                 <Card boxShadow="md" bg={cardBg} borderRadius="lg">
                   <CardBody>
                     <Stack spacing={4}>
-                      <Heading size="md">XP Growth Over Time</Heading>
+                      <Heading size="md">Token Growth Over Time</Heading>
                       
                       <Box h="300px">
                         <ResponsiveContainer width="100%" height="100%">
@@ -304,7 +335,7 @@ const Gamification = () => {
                             <Tr>
                               <Th>Rank</Th>
                               <Th>Partner</Th>
-                              <Th>XP</Th>
+                              <Th>Tokens</Th>
                               <Th>Region</Th>
                               <Th>Joined</Th>
                             </Tr>
@@ -346,7 +377,7 @@ const Gamification = () => {
                                     )}
                                   </Flex>
                                 </Td>
-                                <Td>{item.xp} XP</Td>
+                                <Td>{item.xp} Tokens</Td>
                                 <Td>
                                   <Flex align="center">
                                     <Icon as={FiGlobe} mr={1} />

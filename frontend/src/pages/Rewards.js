@@ -84,21 +84,6 @@ const Rewards = () => {
       ]
     },
     {
-      amount: '$85',
-      color: 'teal',
-      rewards: [
-        { name: 'Amazon Gift Card', details: '$85 credit to spend on Amazon (global)', where: 'Amazon, Dundle, Giftcards.com' },
-        { name: 'Spotify Premium – 8 mo', details: '8 months Premium', where: 'Spotify.com gift card' },
-        { name: 'Canva Pro – 6 mo', details: '6 months Canva Pro', where: 'Canva.com' },
-        { name: 'Netflix Gift Card', details: '$85 balance', where: 'Netflix.com/gift-cards, Dundle' },
-        { name: 'Google Play or Apple Card', details: '$85 for apps or stores', where: 'Dundle, Apple.com' },
-        { name: 'Udemy Course Voucher', details: 'Up to $85 for courses', where: 'Udemy.com/gift' },
-        { name: 'Steam Gift Card', details: '$85 credit', where: 'Steam, Dundle' },
-        { name: 'Airbnb Gift Card', details: '$85 travel/experiences credit', where: 'Airbnb.com/gift' },
-        { name: 'Coaching Session', details: '1-2 sessions (business/skills/soft skills)', where: 'Coach.me, Clarity.fm' }
-      ]
-    },
-    {
       amount: '$100',
       color: 'green',
       rewards: [

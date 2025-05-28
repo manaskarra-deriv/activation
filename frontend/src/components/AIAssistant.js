@@ -18,7 +18,7 @@ import {
   Alert,
   AlertIcon
 } from '@chakra-ui/react';
-import { FiMessageCircle, FiX, FiSend, FiTrash2, FiMaximize2, FiMinimize2 } from 'react-icons/fi';
+import { FiMessageCircle, FiX, FiSend, FiTrash2, FiMaximize2, FiMinimize2, FiTrendingUp } from 'react-icons/fi';
 
 const AIAssistant = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -26,11 +26,12 @@ const AIAssistant = () => {
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [error, setError] = useState(null);
+  const [connectionStatus, setConnectionStatus] = useState('unknown'); // 'connected', 'disconnected', 'unknown'
   const [messages, setMessages] = useState([
     {
       id: 1,
       type: 'bot',
-      content: "Hi! I'm your Partner Academy Assistant powered by AI. I can help you navigate through the Level-Up Journey, understand XP & Rewards, and answer questions about becoming a successful partner. How can I assist you today?",
+      content: "Hi! I'm your Partner Academy Assistant powered by AI. I can help you navigate through the Level-Up Journey, understand tokens & rewards, and answer questions about becoming a successful partner. How can I assist you today?",
       timestamp: new Date()
     }
   ]);
@@ -56,7 +57,7 @@ const AIAssistant = () => {
       {
         id: 1,
         type: 'bot',
-        content: "Hi! I'm your Partner Academy Assistant powered by AI. I can help you navigate through the Level-Up Journey, understand XP & Rewards, and answer questions about becoming a successful partner. How can I assist you today?",
+        content: "Hi! I'm your Partner Academy Assistant powered by AI. I can help you navigate through the Level-Up Journey, understand tokens & rewards, and answer questions about becoming a successful partner. How can I assist you today?",
         timestamp: new Date()
       }
     ]);
@@ -113,30 +114,30 @@ IMPORTANT GUIDELINES:
 PARTNER ACADEMY KNOWLEDGE BASE:
 
 LEVEL-UP JOURNEY STRUCTURE:
-- 4 Levels: Mandatory, Medium, High, PRO
-- Mandatory Level: Complete KYC & Set Payment Method (0 XP - required foundation)
-- Medium Level: Bring 5 clients (500 XP) & Bring 5 sub-affiliates (500 XP)
-- High Level: Earn $50 USD commissions (600 XP) & Earn $500 trading volume (600 XP)
-- PRO Level: Earn $200 USD commissions (2500 XP) & Earn $1000 trading volume (2500 XP)
+- 4 Levels: BASIC, MEDIUM, HIGH, PRO
+- BASIC Level: Complete KYC & Set Payment Method (0 tokens - mandatory foundation, they don't grant tokens)
+- MEDIUM Level: Bring 5 clients (500 tokens) & Bring 5 sub-affiliates (500 tokens)
+- HIGH Level: Earn $50 USD commissions (1000 tokens) & Earn $500 trading volume (1000 tokens)
+- PRO Level: Earn $200 USD commissions (2500 tokens) & Earn $1000 trading volume (2500 tokens)
 
-XP SYSTEM:
-- XP Milestones: 500, 1000, 1500, 3000 XP
-- Medium Level actions: 500 XP each
-- High Level actions: 600 XP each
-- PRO Level actions: 2500 XP each
-- Mandatory actions don't grant XP but unlock other levels
+TOKEN SYSTEM:
+- Token Milestones: Various milestones unlock new opportunities and recognition
+- MEDIUM Level actions: 500 tokens each
+- HIGH Level actions: 1000 tokens each
+- PRO Level actions: 2500 tokens each
+- BASIC level actions are mandatory but don't grant tokens - they unlock other levels
 
 REWARDS SYSTEM:
-- 5 reward tiers: $30, $50, $70, $85, $100
+- 4 reward tiers: $30, $50, $70, $100
 - Rewards include: Amazon Gift Cards, Spotify Premium, Netflix, Canva Pro, coaching sessions, course vouchers
 - Contact partner manager to redeem rewards
 - Higher tiers offer better value
 
 NAVIGATION STRUCTURE:
-- Dashboard: Progress overview and XP tracking
-- Level-Up Journey: Complete actions to earn XP
-- XP & Leaderboard: Track progress and see rankings
-- Rewards: Redeem XP for prizes
+- Dashboard: Progress overview and token tracking
+- Level-Up Journey: Complete actions to earn tokens
+- Tokens & Leaderboard: Track progress and see rankings
+- Rewards: Redeem tokens for prizes
 - FAQs: Common questions answered
 - Profile: Account settings
 - Admin Dashboard: For Deriv staff only
@@ -157,11 +158,11 @@ SUPPORT AVAILABLE:
 - Regular webinars and training
 
 TIMELINE EXPECTATIONS:
-- Mandatory level: Few days
-- Medium/High/PRO levels: Depends on client acquisition success
+- BASIC level: Few days
+- MEDIUM/HIGH/PRO levels: Depends on client acquisition success
 - Most active partners: Significant progress within 3-6 months
 
-For questions outside the Partner Academy scope, respond with: "I'm here to help with Partner Academy questions only. Feel free to ask about the Level-Up Journey, XP system, rewards, or how to succeed as a Deriv partner!"
+For questions outside the Partner Academy scope, respond with: "I'm here to help with Partner Academy questions only. Feel free to ask about the Level-Up Journey, token system, rewards, or how to succeed as a Deriv partner!"
 
 Always provide helpful, accurate information based on this knowledge. Keep responses brief and actionable. Be encouraging and supportive in your responses about partner-related topics. Use **bold text** for emphasis on important points.`;
   };
@@ -246,23 +247,31 @@ Always provide helpful, accurate information based on this knowledge. Keep respo
         }
       ];
 
-      // Get backend URL from environment or use default
-      const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
+      // Get backend URL from environment with multiple fallbacks
+      const backendUrl = process.env.REACT_APP_BACKEND_URL || 
+                        process.env.REACT_APP_API_URL || 
+                        'https://partner-activation-backend.onrender.com';
+      
+      console.log('Attempting to connect to backend:', backendUrl);
       
       const response = await fetch(`${backendUrl}/ai/chat`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
         },
         body: JSON.stringify({
           messages: apiMessages,
           max_tokens: 200,
           temperature: 0.7
-        })
+        }),
+        // Add timeout and other fetch options for better reliability
+        signal: AbortSignal.timeout(30000) // 30 second timeout
       });
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
+        console.error('Backend response error:', response.status, errorData);
         throw new Error(errorData.detail || `Backend request failed: ${response.status} ${response.statusText}`);
       }
 
@@ -275,11 +284,44 @@ Always provide helpful, accurate information based on this knowledge. Keep respo
       }
     } catch (error) {
       console.error('Error calling backend AI API:', error);
-      setError('Sorry, I encountered an error. Please try again.');
       
-      // Fallback response
-      return "I apologize, but I'm having trouble connecting to my AI service right now. Please try asking your question again, or contact your partner manager for immediate assistance with Partner Academy questions.";
+      // Provide more specific error messages
+      if (error.name === 'TimeoutError') {
+        setError('Request timed out. The AI service is taking too long to respond.');
+      } else if (error.message.includes('Failed to fetch') || error.message.includes('ERR_CONNECTION_REFUSED')) {
+        setError('Unable to connect to AI service. Please try again later.');
+      } else {
+        setError('Sorry, I encountered an error. Please try again.');
+      }
+      
+      // Enhanced fallback response with helpful information
+      return getFallbackResponse(userMessage);
     }
+  };
+
+  // Enhanced fallback response system
+  const getFallbackResponse = (userMessage) => {
+    const lowerMessage = userMessage.toLowerCase();
+    
+    // Provide helpful responses based on common questions
+    if (lowerMessage.includes('token') || lowerMessage.includes('xp')) {
+      return "**Token System Overview:**\n\n• **BASIC Level**: Complete KYC & Set Payment Method (0 tokens - mandatory)\n• **MEDIUM Level**: Bring 5 clients (500 tokens) & Bring 5 sub-affiliates (500 tokens)\n• **HIGH Level**: Earn $50 USD commissions (1000 tokens) & Earn $500 trading volume (1000 tokens)\n• **PRO Level**: Earn $200 USD commissions (2500 tokens) & Earn $1000 trading volume (2500 tokens)\n\nFor detailed assistance, please contact your partner manager.";
+    }
+    
+    if (lowerMessage.includes('reward') || lowerMessage.includes('prize')) {
+      return "**Reward Tiers Available:**\n\n• **$30 Tier**: Amazon Gift Cards, Spotify Premium, Netflix, etc.\n• **$50 Tier**: Higher value rewards and longer subscriptions\n• **$70 Tier**: Premium rewards and coaching sessions\n• **$100 Tier**: Top-tier rewards including Masterclass membership\n\nContact your partner manager to redeem rewards with your earned tokens.";
+    }
+    
+    if (lowerMessage.includes('level') || lowerMessage.includes('journey')) {
+      return "**Level-Up Journey Structure:**\n\n• **BASIC**: Account setup (KYC, Payment Method) - Mandatory foundation\n• **MEDIUM**: Client acquisition (5 clients + 5 sub-affiliates)\n• **HIGH**: Commission goals ($50 USD + $500 trading volume)\n• **PRO**: Advanced targets ($200 USD + $1000 trading volume)\n\nEach level builds upon the previous one to develop your partner skills systematically.";
+    }
+    
+    if (lowerMessage.includes('kyc') || lowerMessage.includes('verification')) {
+      return "**KYC Verification Help:**\n\nEnsure your documents are:\n• Clear and readable\n• Valid and not expired\n• Match your account information exactly\n\nIf you're having issues, contact support with your specific error messages for personalized assistance.";
+    }
+    
+    // Default fallback
+    return "I'm currently unable to connect to the AI service, but I can still help! Here are some quick resources:\n\n**Common Topics:**\n• Token system and rewards\n• Level-Up Journey structure\n• KYC and account setup\n• Client acquisition strategies\n\nFor immediate assistance, please contact your partner manager or check the FAQs section.";
   };
 
   const handleSendMessage = async () => {
@@ -330,6 +372,56 @@ Always provide helpful, accurate information based on this knowledge. Keep respo
     }
   };
 
+  // Test backend connection
+  const testConnection = async () => {
+    try {
+      const backendUrl = process.env.REACT_APP_BACKEND_URL || 
+                        process.env.REACT_APP_API_URL || 
+                        'https://partner-activation-backend.onrender.com';
+      
+      const response = await fetch(`${backendUrl}/health`, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json'
+        },
+        signal: AbortSignal.timeout(10000) // 10 second timeout for health check
+      });
+      
+      if (response.ok) {
+        setConnectionStatus('connected');
+        return true;
+      } else {
+        setConnectionStatus('disconnected');
+        return false;
+      }
+    } catch (error) {
+      console.log('Connection test failed:', error);
+      setConnectionStatus('disconnected');
+      return false;
+    }
+  };
+
+  // Test connection when component mounts
+  useEffect(() => {
+    testConnection();
+  }, []);
+
+  // Update initial message based on connection status
+  useEffect(() => {
+    if (connectionStatus !== 'unknown') {
+      const initialMessage = connectionStatus === 'connected' 
+        ? "Hi! I'm your Partner Academy Assistant powered by AI. I can help you navigate through the Level-Up Journey, understand tokens & rewards, and answer questions about becoming a successful partner. How can I assist you today?"
+        : "Hi! I'm your Partner Academy Assistant. I'm currently running in offline mode, but I can still help you with common Partner Academy questions using my built-in knowledge base. How can I assist you today?";
+      
+      setMessages([{
+        id: 1,
+        type: 'bot',
+        content: initialMessage,
+        timestamp: new Date()
+      }]);
+    }
+  }, [connectionStatus]);
+
   return (
     <>
       {/* Floating Chat Button */}
@@ -377,10 +469,33 @@ Always provide helpful, accurate information based on this knowledge. Keep respo
                   <Avatar size="sm" bg="blue.500" icon={<FiMessageCircle />} />
                   <VStack align="start" spacing={0}>
                     <Text fontWeight="bold" fontSize="sm">AI Partner Assistant</Text>
-                    <Badge colorScheme="green" size="sm">Powered by GPT-4</Badge>
+                    <HStack spacing={2}>
+                      <Badge colorScheme="green" size="sm">Powered by GPT-4</Badge>
+                      <Badge 
+                        colorScheme={
+                          connectionStatus === 'connected' ? 'green' : 
+                          connectionStatus === 'disconnected' ? 'red' : 'gray'
+                        } 
+                        size="sm"
+                      >
+                        {connectionStatus === 'connected' ? 'Online' : 
+                         connectionStatus === 'disconnected' ? 'Offline' : 'Checking...'}
+                      </Badge>
+                    </HStack>
                   </VStack>
                 </HStack>
                 <HStack spacing={1}>
+                  {connectionStatus === 'disconnected' && (
+                    <IconButton
+                      icon={<FiTrendingUp />}
+                      size="sm"
+                      variant="ghost"
+                      onClick={testConnection}
+                      _hover={{ bg: 'green.50', color: 'green.500' }}
+                      aria-label="Retry connection"
+                      title="Retry connection"
+                    />
+                  )}
                   <IconButton
                     icon={isExpanded ? <FiMinimize2 /> : <FiMaximize2 />}
                     size="sm"

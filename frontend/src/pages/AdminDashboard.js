@@ -193,8 +193,11 @@ const AdminDashboard = () => {
 
   const getLevelColor = (level) => {
     switch (level) {
+      case 'BASIC': return 'gray';
       case 'Mandatory': return 'gray';
+      case 'MEDIUM': return 'yellow';
       case 'Medium': return 'yellow';
+      case 'HIGH': return 'orange';
       case 'High': return 'orange';
       case 'PRO': return 'purple';
       default: return 'gray';
@@ -316,9 +319,10 @@ const AdminDashboard = () => {
                       </Select>
                       <Select maxW="120px" value={levelFilter} onChange={(e) => setLevelFilter(e.target.value)} size="sm">
                         <option value="all">All Levels</option>
+                        <option value="basic">BASIC</option>
                         <option value="mandatory">Mandatory</option>
-                        <option value="medium">Medium</option>
-                        <option value="high">High</option>
+                        <option value="medium">MEDIUM</option>
+                        <option value="high">HIGH</option>
                         <option value="pro">PRO</option>
                       </Select>
                     </HStack>
@@ -422,21 +426,21 @@ const AdminDashboard = () => {
                   <CardBody>
                     <VStack spacing={4}>
                       <Flex w="full" justify="space-between" align="center">
-                        <Text>Mandatory Level</Text>
+                        <Text>BASIC Level</Text>
                         <HStack>
                           <Progress value={80} size="lg" colorScheme="gray" w="200px" />
                           <Text fontSize="sm" fontWeight="medium">80%</Text>
                         </HStack>
                       </Flex>
                       <Flex w="full" justify="space-between" align="center">
-                        <Text>Medium Level</Text>
+                        <Text>MEDIUM Level</Text>
                         <HStack>
                           <Progress value={60} size="lg" colorScheme="yellow" w="200px" />
                           <Text fontSize="sm" fontWeight="medium">60%</Text>
                         </HStack>
                       </Flex>
                       <Flex w="full" justify="space-between" align="center">
-                        <Text>High Level</Text>
+                        <Text>HIGH Level</Text>
                         <HStack>
                           <Progress value={40} size="lg" colorScheme="orange" w="200px" />
                           <Text fontSize="sm" fontWeight="medium">40%</Text>

@@ -7,9 +7,9 @@ import {
   Tooltip
 } from '@chakra-ui/react';
 
-const XPProgressBar = ({ currentXP = 0, showLabels = true }) => {
-  const milestones = [0, 500, 1000, 1500, 3000];
-  const maxXP = 3000;
+const XPProgressBar = ({ currentXP = 1250, showLabels = true }) => {
+  const milestones = [0, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 6500, 7000, 7500, 8000];
+  const maxXP = 8000;
   const progressPercent = (currentXP / maxXP) * 100;
   
   const progressBg = useColorModeValue('gray.100', 'gray.700');
@@ -22,7 +22,7 @@ const XPProgressBar = ({ currentXP = 0, showLabels = true }) => {
       {/* Progress Bar Container */}
       <Box position="relative" h="12px" bg={progressBg} borderRadius="full" overflow="visible" mb={6}>
         {/* Filled Progress */}
-        <Tooltip label={`${currentXP} XP earned`} placement="top" hasArrow>
+        <Tooltip label={`${currentXP} tokens earned`} placement="top" hasArrow>
           <Box
             position="absolute"
             top="0"
@@ -79,7 +79,7 @@ const XPProgressBar = ({ currentXP = 0, showLabels = true }) => {
       {/* Milestone Labels */}
       {showLabels && (
         <Flex position="relative" justify="space-between" align="center" mb={4}>
-          {milestones.map((milestone) => {
+          {[0, 500, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000].map((milestone) => {
             const position = (milestone / maxXP) * 100;
             const isAchieved = currentXP >= milestone;
             
@@ -109,7 +109,7 @@ const XPProgressBar = ({ currentXP = 0, showLabels = true }) => {
       <Flex justify="center" mt={2}>
         <Box textAlign="center">
           <Text fontSize="lg" fontWeight="600" color={textColor} letterSpacing="0.5px">
-            {currentXP.toLocaleString()} / {maxXP.toLocaleString()} XP
+            {currentXP.toLocaleString()} / {maxXP.toLocaleString()} Tokens
           </Text>
           <Text fontSize="xs" color={milestoneTextColor} mt={1}>
             {((currentXP / maxXP) * 100).toFixed(1)}% Complete

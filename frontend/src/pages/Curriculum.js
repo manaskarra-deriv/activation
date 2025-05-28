@@ -62,11 +62,12 @@ const Curriculum = () => {
         // For now using mock data
         const mockLevels = [
           {
-            id: 'mandatory',
+            id: 'basic',
             title: 'Account Setup & Verification',
             description: 'Complete KYC and Set a Payment Method',
             xp_reward: 0,
             badge: 'Setup Complete',
+            level_label: 'BASIC',
             modules: [
               {
                 id: '1',
@@ -74,6 +75,8 @@ const Curriculum = () => {
                 type: 'task',
                 duration: '10 min',
                 status: 'completed',
+                xp_reward: 0,
+                note: 'Mandatory, they don\'t grant tokens',
                 subModules: [
                   { title: 'KYC essentials', type: 'lesson' }
                 ]
@@ -84,6 +87,8 @@ const Curriculum = () => {
                 type: 'task',
                 duration: '5 min',
                 status: 'completed',
+                xp_reward: 0,
+                note: 'Mandatory, they don\'t grant tokens',
                 subModules: [
                   { title: 'How to Change Payment Methods', type: 'lesson' },
                   { title: 'How to Withdraw', type: 'lesson' }
@@ -100,14 +105,16 @@ const Curriculum = () => {
             description: 'Bring your first clients and sub-affiliates',
             xp_reward: 1000,
             badge: 'Client Builder',
+            level_label: 'MEDIUM',
             modules: [
               {
                 id: '3',
-                title: 'Bring your first 5 clients',
+                title: 'Bring 5 clients',
                 type: 'task',
                 duration: 'varies',
                 status: 'in_progress',
                 xp_reward: 500,
+                token_reward: '500 Tokens',
                 specification: 'with real accounts',
                 subModules: [
                   { title: 'Getting our first clients (The fishing formula)', type: 'lesson' },
@@ -117,11 +124,12 @@ const Curriculum = () => {
               },
               {
                 id: '4',
-                title: 'Bring your first 5 sub-affiliates',
+                title: 'First 5 sub-affiliates',
                 type: 'task',
                 duration: 'varies',
                 status: 'locked',
                 xp_reward: 500,
+                token_reward: '500 Tokens',
                 subModules: [
                   { title: 'How Master Partner Programme Works', type: 'lesson' },
                   { title: 'How to become a Master Partner', type: 'lesson' },
@@ -137,16 +145,18 @@ const Curriculum = () => {
             id: 'high',
             title: 'Revenue Generation',
             description: 'Earn your first commissions and trading volume',
-            xp_reward: 1200,
+            xp_reward: 2000,
             badge: 'Revenue Generator',
+            level_label: 'HIGH',
             modules: [
               {
                 id: '5',
-                title: 'Earn your first 50 USD commissions',
+                title: 'Earn your first 50 USD in commissions',
                 type: 'task',
                 duration: 'varies',
                 status: 'locked',
-                xp_reward: 600,
+                xp_reward: 1000,
+                token_reward: '1000 tokens',
                 subModules: [
                   { title: 'Intro to Deriv Commissions', type: 'lesson' },
                   { title: 'How commissions are calculated', type: 'lesson' },
@@ -158,11 +168,12 @@ const Curriculum = () => {
               },
               {
                 id: '6',
-                title: 'Earn your first 500 USD in trading volume',
+                title: 'Get the first 500 USD in trading volume',
                 type: 'task',
                 duration: 'varies',
                 status: 'locked',
-                xp_reward: 600,
+                xp_reward: 1000,
+                token_reward: '1000 tokens',
                 subModules: [
                   { title: '03 Understanding your metrics', type: 'lesson' }
                 ]
@@ -178,14 +189,16 @@ const Curriculum = () => {
             description: 'Achieve significant commission and trading volume milestones',
             xp_reward: 5000,
             badge: 'PRO Partner',
+            level_label: 'PRO',
             modules: [
               {
                 id: '7',
-                title: 'Earn your first 200 USD commissions',
+                title: 'Earn your first 200 USD in commissions',
                 type: 'task',
                 duration: 'varies',
                 status: 'locked',
                 xp_reward: 2500,
+                token_reward: '2,500 each action',
                 subModules: [
                   { title: 'Intro to Deriv Commissions', type: 'lesson' },
                   { title: 'How commissions are calculated', type: 'lesson' },
@@ -197,11 +210,12 @@ const Curriculum = () => {
               },
               {
                 id: '8',
-                title: 'Earn your first 1000 USD in trading volume',
+                title: 'Get the first 1,000 USD in trading volume',
                 type: 'task',
                 duration: 'varies',
                 status: 'locked',
                 xp_reward: 2500,
+                token_reward: '2,500 each action',
                 subModules: [
                   { title: '03 Understanding your metrics', type: 'lesson' }
                 ]
@@ -286,9 +300,9 @@ const Curriculum = () => {
       <Stack spacing={8}>
         {/* Header */}
         <Box>
-          <Heading mb={2}>Actions and XP</Heading>
+          <Heading mb={2}>Actions and Tokens</Heading>
           <Text color="gray.600">
-            Complete these actions to earn XP and advance through partner levels.
+            Complete these actions to earn tokens and advance through partner levels.
           </Text>
         </Box>
         
@@ -317,7 +331,7 @@ const Curriculum = () => {
                     minW="140px"
                     textAlign="center"
                   >
-                    Level: {level.id.toUpperCase()}
+                    Level: {level.level_label}
                   </Badge>
                   
                   <Box textAlign="left" flex="1">
@@ -425,6 +439,15 @@ const Curriculum = () => {
                                   <Icon as={FiAward} boxSize={3} mr={1} color="accent.500" />
                                   <Text fontSize="sm" fontWeight="medium" color="accent.500">
                                     {module.xp_reward} XP
+                                  </Text>
+                                </Flex>
+                              )}
+                              
+                              {module.token_reward && (
+                                <Flex align="center">
+                                  <Icon as={FiAward} boxSize={3} mr={1} color="red.500" />
+                                  <Text fontSize="sm" fontWeight="medium" color="red.500">
+                                    {module.token_reward}
                                   </Text>
                                 </Flex>
                               )}
