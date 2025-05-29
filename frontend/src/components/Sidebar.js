@@ -23,7 +23,7 @@ import {
   FiHelpCircle,
   FiSettings
 } from 'react-icons/fi';
-import { NavLink as RouterLink } from 'react-router-dom';
+import { NavLink as RouterLink, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import XPProgressBar from './XPProgressBar';
 
@@ -44,13 +44,14 @@ const adminItems = [
 
 const Sidebar = ({ isOpen, onClose }) => {
   const { user } = useAuth();
+  const location = useLocation();
   const bgColor = useColorModeValue('white', 'gray.800');
   const borderColor = useColorModeValue('gray.200', 'gray.700');
   
-  // Calculate progress percentage (simplified)
-  const progressPercent = user?.modules_completed?.length 
-    ? (user.modules_completed.length / 5) * 100 
-    : 0;
+  // Calculate progress percentage with correct max XP of 8000
+  const maxXP = 8000;
+  const currentXP = user?.xp || 1250;
+  const progressPercent = (currentXP / maxXP) * 100;
 
   // Check if user is admin (for now, we'll assume all users can see admin for demo)
   const isAdmin = true; // TODO: Replace with actual admin check
@@ -79,7 +80,7 @@ const Sidebar = ({ isOpen, onClose }) => {
         <Heading size="sm" mb={2}>My Progress</Heading>
         <Box mb={2}>
           <Progress 
-            value={(user?.xp || 750) / 30} // Scale to percentage (750/3000 * 100 = 25%)
+            value={progressPercent}
             size="sm" 
             colorScheme="red" 
             borderRadius="full" 
@@ -87,8 +88,8 @@ const Sidebar = ({ isOpen, onClose }) => {
           />
         </Box>
         <Flex justify="space-between" fontSize="sm">
-          <Text>{user?.xp || 750} XP earned</Text>
-          <Badge colorScheme="brand">{user?.level || 'Apprentice'}</Badge>
+          <Text>{currentXP} XP earned</Text>
+          <Badge colorScheme="brand">{user?.level || 'APPRENTICE'}</Badge>
         </Flex>
       </Box>
       
@@ -102,6 +103,7 @@ const Sidebar = ({ isOpen, onClose }) => {
               icon={item.icon}
               path={item.path}
               onClose={onClose}
+              isActive={location.pathname === item.path}
             >
               {item.name}
             </NavItem>
@@ -125,6 +127,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                   path={item.path}
                   onClose={onClose}
                   isAdmin={true}
+                  isActive={location.pathname === item.path}
                 >
                   {item.name}
                 </NavItem>
@@ -138,7 +141,24 @@ const Sidebar = ({ isOpen, onClose }) => {
 };
 
 // NavItem component
-const NavItem = ({ icon, path, children, onClose, isAdmin = false }) => {
+const NavItem = ({ icon, path, children, onClose, isAdmin = false, isActive = false }) => {
+  const activeBg = useColorModeValue(
+    isAdmin ? 'orange.100' : 'brand.100', 
+    isAdmin ? 'orange.900' : 'brand.900'
+  );
+  const activeColor = useColorModeValue(
+    isAdmin ? 'orange.700' : 'brand.700', 
+    isAdmin ? 'orange.200' : 'brand.200'
+  );
+  const hoverBg = useColorModeValue(
+    isAdmin ? 'orange.50' : 'brand.50', 
+    isAdmin ? 'orange.800' : 'brand.800'
+  );
+  const hoverColor = useColorModeValue(
+    isAdmin ? 'orange.600' : 'brand.600', 
+    isAdmin ? 'orange.300' : 'brand.300'
+  );
+
   return (
     <Box
       as={RouterLink}
@@ -158,17 +178,24 @@ const NavItem = ({ icon, path, children, onClose, isAdmin = false }) => {
         borderRadius="md"
         role="group"
         cursor="pointer"
+        bg={isActive ? activeBg : 'transparent'}
+        color={isActive ? activeColor : 'inherit'}
+        fontWeight={isActive ? '600' : '400'}
+        borderLeft={isActive ? '4px solid' : '4px solid transparent'}
+        borderLeftColor={isActive ? (isAdmin ? 'orange.500' : 'brand.500') : 'transparent'}
         _hover={{
-          bg: isAdmin ? 'orange.50' : 'brand.50',
-          color: isAdmin ? 'orange.600' : 'brand.600',
+          bg: isActive ? activeBg : hoverBg,
+          color: isActive ? activeColor : hoverColor,
         }}
+        transition="all 0.2s"
       >
         <Icon
           mr={4}
           fontSize="18"
           as={icon}
+          color={isActive ? activeColor : 'inherit'}
           _groupHover={{
-            color: isAdmin ? 'orange.600' : 'brand.600',
+            color: isActive ? activeColor : hoverColor,
           }}
         />
         {children}
