@@ -360,8 +360,11 @@ const Dashboard = () => {
             </CardHeader>
             <CardBody>
               <Stack spacing={2} divider={<Divider />}>
-                {leaderboard.slice(0, 3).map((item, index) => (
-                  <Flex key={index} justify="space-between" align="center">
+                {leaderboard
+                  .sort((a, b) => b.xp - a.xp) // Sort by XP descending
+                  .slice(0, 3)
+                  .map((item, index) => (
+                  <Flex key={item.user_id || index} justify="space-between" align="center">
                     <Flex align="center">
                       <Badge
                         colorScheme={index === 0 ? 'yellow' : index === 1 ? 'gray' : 'orange'}
