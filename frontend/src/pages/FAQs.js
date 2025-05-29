@@ -12,9 +12,10 @@ import {
   Collapse,
   Button,
   Icon,
-  Badge
+  Badge,
+  Link
 } from '@chakra-ui/react';
-import { FiChevronDown, FiChevronUp, FiHelpCircle, FiAward, FiTrendingUp, FiUsers } from 'react-icons/fi';
+import { FiChevronDown, FiChevronUp, FiHelpCircle, FiAward, FiTrendingUp, FiUsers, FiSettings } from 'react-icons/fi';
 
 const FAQs = () => {
   const cardBg = useColorModeValue('white', 'gray.700');
@@ -35,79 +36,156 @@ const FAQs = () => {
       faqs: [
         {
           id: 'getting-started-1',
+          question: 'What is the Level-Up Programme?',
+          answer: 'The Level-Up Programme is a structured program designed to help you grow as a Deriv partner by completing milestones in the Level-Up Journey. You earn tokens by bringing clients, recruiting sub-affiliates, making them trade, and earning commissions, which unlock rewards to gain prizes. It provides training, support, and incentives to maximize your success.'
+        },
+        {
+          id: 'getting-started-2',
+          question: 'How long does it take to complete the program?',
+          answer: 'The timeline varies based on your dedication and business development pace. The BASIC level can be completed in a few days, while advancing through MEDIUM, HIGH, and PRO levels depends on your success in bringing clients and empowering them to trade. Most active partners see significant progress within 2-3 months.'
+        },
+        {
+          id: 'getting-started-3',
           question: 'How do I start my partner journey?',
           answer: 'Welcome to the Partner Activation Academy! Start by completing your Level-Up Journey. Begin with the BASIC Level actions like completing KYC and setting up your payment method. These foundational steps will prepare you for earning tokens and advancing through the program.'
         },
         {
-          id: 'getting-started-2',
-          question: 'What is the Level-Up Journey?',
-          answer: 'The Level-Up Journey is our structured curriculum designed to help you become a successful partner. It consists of four levels: BASIC (account setup - mandatory, no tokens), MEDIUM (client acquisition - 500 tokens each), HIGH (commission goals - 1000 tokens each), and PRO (advanced targets - 2500 tokens each). Each level contains specific actions that earn you tokens when completed.'
-        },
-        {
-          id: 'getting-started-3',
-          question: 'How long does it take to complete the program?',
-          answer: 'The timeline varies based on your dedication and business development pace. The BASIC level can be completed in a few days, while advancing through MEDIUM, HIGH, and PRO levels depends on your success in bringing clients and generating commissions. Most active partners see significant progress within 3-6 months.'
+          id: 'getting-started-4',
+          question: 'Can I skip levels or complete actions out of order?',
+          answer: 'Some actions are mandatory (like completing KYC and setting up your payment method), but many other actions can be completed in any order. However, to unlock each reward level, you need to meet the specific token milestones required.'
         }
       ]
     },
     {
-      title: 'XP & Rewards',
+      title: 'Actions and Tokens',
       icon: FiTrendingUp,
-      color: 'red',
+      color: 'green',
       faqs: [
         {
-          id: 'xp-rewards-1',
-          question: 'How do I earn tokens?',
-          answer: 'You earn tokens by completing actions in your Level-Up Journey. MEDIUM level actions (bringing clients/sub-affiliates) earn 500 tokens each, HIGH level actions (commissions/trading volume) earn 1000 tokens each, and PRO level actions earn 2500 tokens each. BASIC level actions are mandatory but don\'t grant tokens - they unlock other levels.'
+          id: 'actions-tokens-1',
+          question: 'What is KYC?',
+          answer: 'KYC stands for "Know Your Customer." In Deriv, KYC refers to the process where clients and partners are required to verify their identity and home address by submitting specific documents (such as ID, passport, bills, etc.). This is done to ensure compliance with regulations and to protect against fraud.'
         },
         {
-          id: 'xp-rewards-2',
+          id: 'actions-tokens-2',
+          question: 'What is a payment method?',
+          answer: 'A payment method in Deriv is the way clients can deposit or withdraw funds from their trading accounts. Examples of payment methods include credit/debit cards, e-wallets, bank transfers, and cryptocurrencies.'
+        },
+        {
+          id: 'actions-tokens-3',
+          question: 'What is a Client?',
+          answer: 'A client in Deriv is any individual or entity who creates an account and uses the platform\'s services to trade financial instruments.'
+        },
+        {
+          id: 'actions-tokens-4',
+          question: 'How do I bring my first clients or sub-affiliates?',
+          answer: 'Below each action, you\'ll see a variety of courses, e-books, PDFs, YouTube videos, and more educational materials to cover strategies for client acquisition, including identifying your target audience, creating compelling content, and leveraging your network. Focus on building trust and providing value to potential clients or sub-affiliates.'
+        },
+        {
+          id: 'actions-tokens-5',
+          question: 'What is an affiliate/partner?',
+          answer: 'An affiliate in Deriv is a person or organization that promotes Deriv\'s services in exchange for commissions. Affiliates refer clients to Deriv through special links or codes and earn rewards when those clients open accounts and start trading.'
+        },
+        {
+          id: 'actions-tokens-6',
+          question: 'What is a sub-affiliate?',
+          answer: 'A sub-affiliate in Deriv is someone who is recruited by an affiliate to join the affiliate program. The main affiliate earns a percentage of the commissions generated by their sub-affiliates.'
+        },
+        {
+          id: 'actions-tokens-7',
+          question: 'What is the trading volume in Deriv?',
+          answer: 'Trading volume in Deriv refers to the total value or size of all trades executed by a client or by clients referred by an affiliate over a specific period.'
+        },
+        {
+          id: 'actions-tokens-8',
+          question: 'What are commissions in Deriv?',
+          answer: (
+            <span>
+              Commissions are the earnings paid to affiliates based on the trading volume or activity generated by the clients they refer. This is a way for Deriv to reward partners for bringing in more clients or transactions. The exact calculation depends on the specific products and client activity levels. Detailed commission structures are available here: {' '}
+              <Link href="https://docs.deriv.com/partners/ib-cfds-commissions-how-its-calculated.pdf" color="blue.500" isExternal>
+                https://docs.deriv.com/partners/ib-cfds-commissions-how-its-calculated.pdf
+              </Link>
+            </span>
+          )
+        },
+        {
+          id: 'actions-tokens-9',
+          question: 'How do I earn tokens?',
+          answer: 'Affiliates earn tokens by completing specific actions. These tokens can later be redeemed for rewards such as gift cards, courses, premium tools, mentorships and more. The system is designed to promote incremental progress, turning small achievements into real motivation.'
+        },
+        {
+          id: 'actions-tokens-10',
           question: 'What are the token milestones?',
           answer: 'There are key token milestones that unlock new opportunities and recognition within the partner program. Your progress is tracked on your dashboard and throughout the platform. The more tokens you earn, the higher your ranking and rewards potential.'
         },
         {
-          id: 'xp-rewards-3',
-          question: 'How do I redeem rewards?',
-          answer: 'Once you\'ve accumulated enough tokens, you can redeem them for various rewards including Amazon gift cards, Spotify Premium, Canva Pro, Netflix subscriptions, and more. Contact your partner manager to process your reward redemption. We recommend saving up for higher-value tiers to maximize your rewards.'
+          id: 'actions-tokens-11',
+          question: 'Can they hold on to their earned tokens, which are already eligible for a lower reward, and wait until they reach a higher or intermediate reward instead?',
+          answer: 'Yes, they can redeem the reward at the stage they want ($30, $50, $70 or $100).'
         },
         {
-          id: 'xp-rewards-4',
-          question: 'What reward tiers are available?',
-          answer: 'We offer four reward tiers: $30, $50, $70, and $100 in prizes. Each tier includes various options like gift cards, software subscriptions, course vouchers, and coaching sessions. Higher tiers offer better value and more premium rewards.'
+          id: 'actions-tokens-12',
+          question: 'Example: If the action is to bring 5 clients and it\'s worth 500 tokens, and I bring 10 clients, do the tokens double?',
+          answer: 'No, if your result exceeds the target of the action, it doesn\'t affect the number of tokens you earn. For example, in this case, even if you bring 10 clients, the action will still be worth 500 tokens. The only time the token value changes is in the "Pro" stage, where there are "same kind of actions" but more challenging, which are worth more tokens, but only in that specific stage.'
+        },
+        {
+          id: 'actions-tokens-13',
+          question: 'Can tokens be transferred to another partner or account?',
+          answer: 'No, tokens are personal and non-transferable. They are strictly tied to your partner account.'
+        },
+        {
+          id: 'actions-tokens-14',
+          question: 'Are there any actions that can be completed more than once for extra tokens?',
+          answer: 'No, each action in the Level-Up Program can only be completed once per partner account.'
+        },
+        {
+          id: 'actions-tokens-15',
+          question: 'Can I complete the actions in any order, or do I need to follow a sequence?',
+          answer: 'Apart from the "basic" actions, which are mandatory to unlock any rewards, the remaining actions can be completed in any order, giving you flexibility as you progress.'
         }
       ]
     },
     {
-      title: 'Partner Activities',
-      icon: FiUsers,
-      color: 'green',
+      title: 'Rewards',
+      icon: FiAward,
+      color: 'purple',
       faqs: [
         {
-          id: 'activities-1',
-          question: 'How do I bring my first clients?',
-          answer: 'Start with the "Getting our first clients (The fishing formula)" lesson in your Level-Up Journey. This covers proven strategies for client acquisition, including identifying your target audience, creating compelling content, and leveraging your network. Focus on building trust and providing value to potential clients.'
+          id: 'rewards-1',
+          question: 'How do I redeem rewards?',
+          answer: 'Once you\'ve accumulated enough tokens, you can redeem them for various rewards including Amazon gift cards, Spotify Premium, Canva Pro, Netflix subscriptions, and more. Contact your partner manager to process your reward redemption. We recommend saving up for higher-value tiers to maximize your rewards.'
         },
         {
-          id: 'activities-2',
-          question: 'What counts as a sub-affiliate?',
-          answer: 'A sub-affiliate is someone you recruit who becomes a partner under your referral. They should be actively engaged in promoting our products and services. When you successfully bring 5 sub-affiliates, you\'ll earn 500 tokens and advance in the MEDIUM level of your journey.'
+          id: 'rewards-2',
+          question: 'What reward tiers are available?',
+          answer: 'We offer four reward tiers: $30, $50, $70, and $100 in prizes. Each tier includes various options like gift cards, software subscriptions, course vouchers, and coaching sessions. Higher tiers offer better value and more premium rewards.'
         },
         {
-          id: 'activities-3',
-          question: 'How are commissions calculated?',
-          answer: 'Commissions are based on the trading activity and deposits of clients you refer. The exact calculation depends on the specific products and client activity levels. Detailed commission structures are available in your partner dashboard and through your partner manager.'
+          id: 'rewards-3',
+          question: 'If they received the reward at for example the second stage ($50), can they continue earning rewards?',
+          answer: 'No, they can do it just once. Then, they start the "normal" Tiering program journey.'
         },
         {
-          id: 'activities-4',
-          question: 'What support is available for partners?',
-          answer: 'We provide comprehensive support including this Level-Up Journey curriculum, regular coaching sessions, marketing materials, and dedicated partner manager support. You can also access our community forums and attend regular webinars and training sessions.'
+          id: 'rewards-4',
+          question: 'Are there any geographic restrictions for certain digital rewards (gift cards, subscriptions, etc.)?',
+          answer: 'All of them are digital rewards and selected to be redeemable globally. However, some gift cards or services may have regional restrictions. Check them before redeeming them.'
+        },
+        {
+          id: 'rewards-5',
+          question: 'If I have trouble redeeming a digital reward (e.g., a gift card code doesn\'t work), what should I do?',
+          answer: 'Please contact support or your country manager immediately with details of the issue. We\'ll work to resolve it and ensure you receive a valid reward or a replacement option.'
+        },
+        {
+          id: 'rewards-6',
+          question: 'Can I choose more than one reward if I have enough tokens for multiple tiers?',
+          answer: 'No, each partner can only redeem one reward during the Level-Up Program.'
         }
       ]
     },
     {
       title: 'Technical & Account',
-      icon: FiAward,
-      color: 'purple',
+      icon: FiSettings,
+      color: 'red',
       faqs: [
         {
           id: 'technical-1',
@@ -121,13 +199,38 @@ const FAQs = () => {
         },
         {
           id: 'technical-3',
+          question: 'How do I track my clients?',
+          answer: 'You can track your clients through your partner dashboard, which provides real-time updates on client activity, registrations, and trading performance.'
+        },
+        {
+          id: 'technical-4',
           question: 'Can I track my progress in real-time?',
           answer: 'Yes! Your dashboard provides real-time updates on your tokens, completed actions, leaderboard ranking, and overall progress. The progress bar shows your current position and next milestones. All your achievements and statistics are updated automatically.'
         },
         {
-          id: 'technical-4',
+          id: 'technical-5',
           question: 'Who do I contact for additional support?',
-          answer: 'For general questions, start with these FAQs. For account-specific issues, contact your assigned partner manager. For technical problems, reach out to our support team through the help desk. For reward redemptions, coordinate with your partner manager.'
+          answer: 'For general questions, start with these FAQs. For account-specific issues, contact your assigned partner manager. For technical problems, reach out to our support team through the help desk. For reward redemptions, coordinate with your country manager.'
+        },
+        {
+          id: 'technical-6',
+          question: 'What security measures are in place for my data during KYC and payments?',
+          answer: 'Deriv uses industry-standard encryption and strict data protection protocols during the KYC process and when handling payment methods. Your documents and information are securely stored and are never shared with third parties outside what is required by our regulators.'
+        },
+        {
+          id: 'technical-7',
+          question: 'What if I lose access to my account or email before receiving my reward?',
+          answer: 'Please contact support immediately for help recovering your account. Account and reward eligibility are based on the successful completion of Identity Verification.'
+        },
+        {
+          id: 'technical-8',
+          question: 'Can I access the Level-Up dashboard from mobile devices?',
+          answer: 'Yes! You can access your Level-Up dashboard from any browser, including on tablets or smartphones.'
+        },
+        {
+          id: 'technical-9',
+          question: 'Is my progress saved if I temporarily stop participating?',
+          answer: 'Yes. Your completed actions, earned tokens, and progress are safely saved. You can resume your Level-Up journey at any time.'
         }
       ]
     }
