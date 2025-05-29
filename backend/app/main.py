@@ -135,7 +135,12 @@ LEADERBOARD = [
     {"user_id": "2", "username": "affiliate_master", "xp": 3200, "level": "Expert", "badges": 14},
     {"user_id": "3", "username": "traffic_guru", "xp": 1950, "level": "Practitioner", "badges": 8},
     {"user_id": "4", "username": "campaign_king", "xp": 4100, "level": "Master", "badges": 18},
-    {"user_id": "5", "username": "conversion_queen", "xp": 2300, "level": "Practitioner", "badges": 10}
+    {"user_id": "5", "username": "conversion_queen", "xp": 2300, "level": "Practitioner", "badges": 10},
+    {"user_id": "6", "username": "crypto_trader", "xp": 1800, "level": "Practitioner", "badges": 7},
+    {"user_id": "7", "username": "forex_expert", "xp": 1650, "level": "Apprentice", "badges": 6},
+    {"user_id": "8", "username": "stock_master", "xp": 1500, "level": "Apprentice", "badges": 5},
+    {"user_id": "9", "username": "options_pro", "xp": 1350, "level": "Apprentice", "badges": 4},
+    {"user_id": "10", "username": "bond_trader", "xp": 1200, "level": "Apprentice", "badges": 3}
 ]
 
 # Models
@@ -220,7 +225,9 @@ def get_module(module_id: str):
 
 @app.get("/leaderboard")
 def get_leaderboard():
-    return LEADERBOARD
+    # Sort leaderboard by XP in descending order
+    sorted_leaderboard = sorted(LEADERBOARD, key=lambda x: x["xp"], reverse=True)
+    return sorted_leaderboard
 
 @app.post("/users")
 def create_user(user: User):

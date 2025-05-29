@@ -81,21 +81,40 @@ const Gamification = () => {
           { date: 'Feb 20', xp: 1250 },
         ];
         
-        // Leaderboard
-        const mockLeaderboard = [
-          { rank: 1, username: 'TopPartner123', xp: 1250, region: 'Asia', join_date: 'Dec 2022', profile_img: null },
-          { rank: 2, username: 'TradingPro', xp: 1120, region: 'Europe', join_date: 'Nov 2022', profile_img: null },
-          { rank: 3, username: 'FinanceGuru', xp: 980, region: 'Africa', join_date: 'Jan 2023', profile_img: null },
-          { rank: 4, username: 'InvestorElite', xp: 920, region: 'Americas', join_date: 'Dec 2022', profile_img: null },
-          { rank: 5, username: 'MarketMaster', xp: 870, region: 'Asia', join_date: 'Feb 2023', profile_img: null },
-          { rank: 6, username: 'TradingExpert', xp: 820, region: 'Europe', join_date: 'Jan 2023', profile_img: null },
-          { rank: 7, username: 'CryptoKing', xp: 780, region: 'Americas', join_date: 'Nov 2022', profile_img: null },
-          { rank: 8, username: 'ForexChamp', xp: 750, region: 'Africa', join_date: 'Dec 2022', profile_img: null },
-          { rank: 9, username: user?.username || 'CurrentUser', xp: 1250, region: 'Asia', join_date: 'Jan 2023', profile_img: null, is_current_user: true },
-          { rank: 10, username: 'OptionsPro', xp: 720, region: 'Europe', join_date: 'Feb 2023', profile_img: null },
+        // Leaderboard - Create realistic data and sort properly
+        const mockLeaderboardData = [
+          { username: 'TopPartner123', xp: 2850, region: 'Asia', join_date: 'Dec 2022', profile_img: null },
+          { username: 'TradingPro', xp: 2650, region: 'Europe', join_date: 'Nov 2022', profile_img: null },
+          { username: 'FinanceGuru', xp: 2100, region: 'Africa', join_date: 'Jan 2023', profile_img: null },
+          { username: 'InvestorElite', xp: 1950, region: 'Americas', join_date: 'Dec 2022', profile_img: null },
+          { username: 'MarketMaster', xp: 1800, region: 'Asia', join_date: 'Feb 2023', profile_img: null },
+          { username: 'TradingExpert', xp: 1650, region: 'Europe', join_date: 'Jan 2023', profile_img: null },
+          { username: 'CryptoKing', xp: 1500, region: 'Americas', join_date: 'Nov 2022', profile_img: null },
+          { username: 'ForexChamp', xp: 1350, region: 'Africa', join_date: 'Dec 2022', profile_img: null },
+          { username: user?.username || 'demo_partner', xp: 1250, region: 'Asia', join_date: 'Jan 2023', profile_img: null, is_current_user: true },
+          { username: 'OptionsPro', xp: 1100, region: 'Europe', join_date: 'Feb 2023', profile_img: null },
+          { username: 'StockTrader', xp: 950, region: 'Americas', join_date: 'Jan 2023', profile_img: null },
+          { username: 'BondMaster', xp: 800, region: 'Africa', join_date: 'Feb 2023', profile_img: null },
         ];
-        
-        setLeaderboard(mockLeaderboard);
+
+        // Sort by XP (descending) and assign ranks
+        const sortedLeaderboard = mockLeaderboardData
+          .sort((a, b) => {
+            // Primary sort: by XP (descending)
+            if (b.xp !== a.xp) {
+              return b.xp - a.xp;
+            }
+            // Tie-breaker: by join date (earlier joiners get better rank)
+            const dateA = new Date(a.join_date);
+            const dateB = new Date(b.join_date);
+            return dateA - dateB;
+          })
+          .map((item, index) => ({
+            ...item,
+            rank: index + 1
+          }));
+
+        setLeaderboard(sortedLeaderboard);
         setXpHistory(mockXpHistory);
       } catch (error) {
         console.error('Error fetching data:', error);
