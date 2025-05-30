@@ -114,7 +114,6 @@ const Curriculum = () => {
                 duration: 'varies',
                 status: 'in_progress',
                 xp_reward: 500,
-                token_reward: '500 Tokens',
                 specification: 'with real accounts',
                 subModules: [
                   { title: 'Getting our first clients (The fishing formula)', type: 'lesson' },
@@ -129,7 +128,6 @@ const Curriculum = () => {
                 duration: 'varies',
                 status: 'locked',
                 xp_reward: 500,
-                token_reward: '500 Tokens',
                 subModules: [
                   { title: 'How Master Partner Programme Works', type: 'lesson' },
                   { title: 'How to become a Master Partner', type: 'lesson' },
@@ -156,7 +154,6 @@ const Curriculum = () => {
                 duration: 'varies',
                 status: 'locked',
                 xp_reward: 1000,
-                token_reward: '1000 tokens',
                 subModules: [
                   { title: 'Intro to Deriv Commissions', type: 'lesson' },
                   { title: 'How commissions are calculated', type: 'lesson' },
@@ -173,7 +170,6 @@ const Curriculum = () => {
                 duration: 'varies',
                 status: 'locked',
                 xp_reward: 1000,
-                token_reward: '1000 tokens',
                 subModules: [
                   { title: '03 Understanding your metrics', type: 'lesson' }
                 ]
@@ -198,7 +194,6 @@ const Curriculum = () => {
                 duration: 'varies',
                 status: 'locked',
                 xp_reward: 2500,
-                token_reward: '2,500 each action',
                 subModules: [
                   { title: 'Intro to Deriv Commissions', type: 'lesson' },
                   { title: 'How commissions are calculated', type: 'lesson' },
@@ -215,7 +210,6 @@ const Curriculum = () => {
                 duration: 'varies',
                 status: 'locked',
                 xp_reward: 2500,
-                token_reward: '2,500 each action',
                 subModules: [
                   { title: '03 Understanding your metrics', type: 'lesson' }
                 ]
@@ -441,19 +435,6 @@ const Curriculum = () => {
                                     {module.xp_reward} XP
                                   </Text>
                                 </Flex>
-                              )}
-                              
-                              {module.token_reward && (
-                                <Flex align="center">
-                                  <Icon as={FiAward} boxSize={3} mr={1} color="red.500" />
-                                  <Text fontSize="sm" fontWeight="medium" color="red.500">
-                                    {module.token_reward}
-                                  </Text>
-                                </Flex>
-                              )}
-                              
-                              {module.questions && (
-                                <Text fontSize="sm">{module.questions} questions</Text>
                               )}
                             </Flex>
                           </Box>
